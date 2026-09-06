@@ -12,19 +12,6 @@
   overflow: hidden;
 }
 
-.brand-static::before {
-  content: "";
-  position: absolute;
-  inset: 10% 7%;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 18% 50%, rgba(255, 90, 200, 0.035), transparent 32%),
-    radial-gradient(circle at 50% 50%, rgba(87, 230, 200, 0.025), transparent 34%),
-    radial-gradient(circle at 82% 50%, rgba(140, 108, 255, 0.035), transparent 32%);
-  filter: blur(20px);
-  pointer-events: none;
-}
-
 .brand-static svg {
   position: relative;
   z-index: 1;
@@ -42,33 +29,24 @@
   letter-spacing: 2px;
 }
 
+/* El letrero existe, pero permanece totalmente apagado sin luz. */
 .brand-static__base {
-  opacity: 0.045;
+  opacity: 0;
 }
 
+/* El halo acompaña la zona iluminada sin dibujar barras sobre las letras. */
 .brand-static__illuminated-glow {
-  opacity: 0.44;
+  opacity: 0.28;
 }
 
+/* Las letras reveladas son sólidas; la máscara decide qué zonas pueden verse. */
 .brand-static__illuminated-text {
   opacity: 1;
 }
 
-#lightMaskHalos rect {
-  fill: #ffffff;
-}
-
+#lightMaskHalos rect,
 #lightMaskCores rect {
   fill: #ffffff;
-}
-
-#lightBeams {
-  pointer-events: none;
-}
-
-#lightBeams rect {
-  fill: url(#beamLightGradient);
-  mix-blend-mode: screen;
 }
 
 .controls {
