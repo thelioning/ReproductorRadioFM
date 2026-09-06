@@ -36,15 +36,35 @@ body {
 }
 
 .player__header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) 78px;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
+  min-height: 58px;
+}
+
+.player__header::before {
+  content: "";
+  width: 68px;
+  height: 48px;
+  justify-self: start;
+  border-radius: 9px;
+  background:
+    #f8fbfd url("../assets/alcatraz-logo.png") center / contain no-repeat;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+
+.player__header > div {
+  min-width: 0;
+  text-align: center;
 }
 
 .player__header h1 {
   margin: 0;
   font-size: 1.65rem;
+  line-height: 1.08;
 }
 
 .player__header p {
@@ -56,6 +76,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  justify-self: end;
   padding: 7px 13px;
   border-radius: 7px;
   background: var(--live);
@@ -297,6 +318,32 @@ body {
   .player {
     padding: 22px;
     border-radius: 22px;
+  }
+
+  .player__header {
+    grid-template-columns: 56px minmax(0, 1fr) 56px;
+    gap: 10px;
+    min-height: 48px;
+  }
+
+  .player__header::before {
+    width: 50px;
+    height: 36px;
+    border-radius: 7px;
+  }
+
+  .player__header h1 {
+    font-size: 1.18rem;
+  }
+
+  .player__header p {
+    margin-top: 4px;
+    font-size: 0.78rem;
+  }
+
+  .live-badge {
+    padding: 6px 9px;
+    font-size: 0.68rem;
   }
 
   .controls {
