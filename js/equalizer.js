@@ -2,18 +2,33 @@
   const panel = document.getElementById("equalizerPanel");
   const toggle = document.getElementById("eqToggle");
   const toggleLabel = document.getElementById("eqToggleLabel");
+  const collapseButton = document.getElementById("eqCollapse");
+  const collapseIcon = document.getElementById("eqCollapseIcon");
+  const content = document.getElementById("equalizerContent");
   const message = document.getElementById("eqMessage");
   const resetButton = document.getElementById("eqReset");
   const masterSelect = document.getElementById("eqMasterGain");
   const presetButtons = Array.from(document.querySelectorAll("[data-eq-preset]"));
   const sliders = Array.from(document.querySelectorAll("[data-eq-band]"));
 
-  if (!panel || !toggle || !toggleLabel || !message || !resetButton || !masterSelect || sliders.length !== 10) {
+  if (
+    !panel ||
+    !toggle ||
+    !toggleLabel ||
+    !collapseButton ||
+    !collapseIcon ||
+    !content ||
+    !message ||
+    !resetButton ||
+    !masterSelect ||
+    sliders.length !== 10
+  ) {
     return;
   }
 
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   const STORAGE_KEY = "alcatraz-equalizer-settings";
+  const STORAGE_COLLAPSED_KEY = "alcatraz-equalizer-collapsed";
   const FREQUENCIES = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
   const PRESETS = {
     Flat: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,6 +50,7 @@
   let corsChecked = false;
   let corsAllowed = false;
   let currentPreset = "Flat";
+  let collapsed = true;
 
   function dbToGain(db) {
     return Math.pow(10, Number(db) / 20);
@@ -54,6 +70,38 @@
     toggle.classList.toggle("is-enabled", enabled);
     toggle.setAttribute("aria-pressed", enabled ? "true" : "false");
     toggleLabel.textContent = enabled ? "Activado" : "Desactivado";
+  }
+
+  function updateCollapsedUI() {
+    panel.classList.toggle("is-collapsed", collapsed);
+    collapseButton.setAttribute("aria-expanded", collapsed ? "false" : "true");
+
+    const label = collapsed
+      ? "Mostrar controles del ecualizador"
+      : "Ocultar controles del ecualizador";
+
+    collapseButton.setAttribute("aria-label", label);
+    collapseButton.title = label;
+    collapseIcon.textContent = collapsed ? "⌄" : "⌃";
+  }
+
+  function saveCollapsedState() {
+    try {
+      localStorage.setItem(STORAGE_COLLAPSED_KEY, collapsed ? "1" : "0");
+    } catch (error) {
+      console.debug("No se pudo guardar el estado plegado del ecualizador.", error);
+    }
+  }
+
+  function restoreCollapsedState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_COLLAPSED_KEY);
+      collapsed = saved === null ? true : saved === "1";
+    } catch (error) {
+      collapsed = true;
+    }
+
+    updateCollapsedUI();
   }
 
   function updatePresetUI(name) {
@@ -222,11 +270,9 @@
       masterGain = audioContext.createGain();
       sourceNode = audioContext.createMediaElementSource(radio);
 
-      /* Ruta seca: bypass real, sin filtros ni ganancia general. */
       sourceNode.connect(dryGain);
       dryGain.connect(audioContext.destination);
 
-      /* Ruta procesada: 10 bandas -> wet -> ganancia general -> salida. */
       sourceNode.connect(filters[0]);
       for (let index = 0; index < filters.length - 1; index += 1) {
         filters[index].connect(filters[index + 1]);
@@ -290,6 +336,12 @@
 
   toggle.addEventListener("click", () => setEnabled(!enabled));
 
+  collapseButton.addEventListener("click", () => {
+    collapsed = !collapsed;
+    updateCollapsedUI();
+    saveCollapsedState();
+  });
+
   presetButtons.forEach((button) => {
     button.addEventListener("click", () => setPreset(button.dataset.eqPreset));
   });
@@ -331,6 +383,8 @@
       }
     }
   });
+
+  restoreCollapsedState();
 
   if (!AudioContextClass) {
     toggle.disabled = true;
