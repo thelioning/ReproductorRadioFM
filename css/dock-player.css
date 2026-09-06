@@ -34,11 +34,11 @@
 }
 
 .radio-dock__logo {
-  width: 58px;
+  width: 78px;
   height: 58px;
   flex: 0 0 auto;
   object-fit: contain;
-  padding: 5px;
+  padding: 4px;
   border-radius: 8px;
   background: #fff;
 }
@@ -195,13 +195,13 @@
   right: 18px;
   bottom: 18px;
   z-index: 10000;
-  width: 58px;
+  width: 64px;
   height: 58px;
   padding: 5px;
   display: none;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 14px;
   background: #fff;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -221,7 +221,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 50%;
+  border-radius: 8px;
 }
 
 .radio-dock-launcher__arrow {
@@ -249,7 +249,7 @@
   }
 
   .radio-dock__logo {
-    width: 48px;
+    width: 66px;
     height: 48px;
   }
 
@@ -276,8 +276,8 @@
   }
 
   .radio-dock-launcher {
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 52px;
     right: 14px;
     bottom: 14px;
   }
