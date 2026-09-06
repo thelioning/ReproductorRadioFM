@@ -12,7 +12,7 @@
   const BAR_STEP = 17;
   const BAR_WIDTH = 12;
   const CENTER_Y = 94;
-  const MIN_HEIGHT = 10;
+  const MIN_HEIGHT = 12;
   const MAX_HEIGHT = 176;
   const FRAME_INTERVAL = 1000 / 30;
 
@@ -21,7 +21,7 @@
 
   let lastFrame = 0;
   let lastTimestamp = 0;
-  let fallbackPlaybackTime = 0;
+  let animationSeconds = 0;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -46,6 +46,7 @@
     rect.setAttribute("height", 0);
     rect.setAttribute("rx", BAR_WIDTH / 2);
     rect.setAttribute("ry", BAR_WIDTH / 2);
+    rect.setAttribute("fill", "#ffffff");
 
     spectrumGroup.appendChild(rect);
 
@@ -73,52 +74,47 @@
     });
   }
 
-  function getPlaybackSeconds(timestamp) {
-    const mediaTime = Number(audioElement.currentTime);
-
-    if (Number.isFinite(mediaTime) && mediaTime > 0) {
-      return mediaTime;
-    }
-
+  function updateAnimationClock(timestamp) {
     if (!lastTimestamp) {
       lastTimestamp = timestamp;
-      return fallbackPlaybackTime;
+      return;
     }
 
     const delta = Math.min(50, Math.max(0, timestamp - lastTimestamp));
+    lastTimestamp = timestamp;
+
     const playbackRate = Number.isFinite(audioElement.playbackRate)
       ? audioElement.playbackRate
       : 1;
 
-    fallbackPlaybackTime += (delta / 1000) * playbackRate;
-    return fallbackPlaybackTime;
+    animationSeconds += (delta / 1000) * playbackRate;
   }
 
-  function getSpectrumLevel(position, index, playbackSeconds) {
-    const centerA = (playbackSeconds * 0.095) % 1;
-    const centerB = (1 - ((playbackSeconds * 0.071 + 0.29) % 1) + 1) % 1;
-    const centerC = (playbackSeconds * 0.126 + 0.58) % 1;
+  function getSpectrumLevel(position, index, time) {
+    const centerA = (time * 0.10) % 1;
+    const centerB = (1 - ((time * 0.073 + 0.31) % 1) + 1) % 1;
+    const centerC = (time * 0.128 + 0.61) % 1;
 
-    const packetA = gaussian(circularDistance(position, centerA), 0.115);
-    const packetB = gaussian(circularDistance(position, centerB), 0.145) * 0.88;
-    const packetC = gaussian(circularDistance(position, centerC), 0.095) * 0.76;
+    const packetA = gaussian(circularDistance(position, centerA), 0.12);
+    const packetB = gaussian(circularDistance(position, centerB), 0.15) * 0.88;
+    const packetC = gaussian(circularDistance(position, centerC), 0.10) * 0.78;
     const travellingEnvelope = Math.max(packetA, packetB, packetC);
 
-    const detailA = 0.5 + 0.5 * Math.sin(index * 0.61 + playbackSeconds * 4.15);
-    const detailB = 0.5 + 0.5 * Math.sin(index * 0.27 - playbackSeconds * 2.65);
-    const detailC = 0.5 + 0.5 * Math.sin(index * 0.13 + playbackSeconds * 1.35);
+    const detailA = 0.5 + 0.5 * Math.sin(index * 0.62 + time * 4.25);
+    const detailB = 0.5 + 0.5 * Math.sin(index * 0.29 - time * 2.75);
+    const detailC = 0.5 + 0.5 * Math.sin(index * 0.14 + time * 1.45);
 
-    const localTexture = detailA * 0.48 + detailB * 0.32 + detailC * 0.20;
-    const pulse = 0.80 + 0.20 * Math.sin(playbackSeconds * 2.05 + position * 8.2);
+    const texture = detailA * 0.50 + detailB * 0.30 + detailC * 0.20;
+    const pulse = 0.78 + 0.22 * Math.sin(time * 2.15 + position * 8.5);
 
-    const mixed = 0.06 + (travellingEnvelope * 0.68 + localTexture * 0.32) * pulse;
-    return clamp(Math.pow(mixed, 1.35), 0, 1);
+    const mixed = 0.08 + (travellingEnvelope * 0.66 + texture * 0.34) * pulse;
+    return clamp(Math.pow(mixed, 1.22), 0, 1);
   }
 
   function getReducedMotionLevel(position) {
     const packetA = gaussian(circularDistance(position, 0.27), 0.13);
     const packetB = gaussian(circularDistance(position, 0.68), 0.15) * 0.82;
-    return clamp(0.08 + Math.max(packetA, packetB) * 0.92, 0, 1);
+    return clamp(0.10 + Math.max(packetA, packetB) * 0.90, 0, 1);
   }
 
   function render(timestamp) {
@@ -136,17 +132,16 @@
       return;
     }
 
-    const playbackSeconds = getPlaybackSeconds(timestamp);
-    lastTimestamp = timestamp;
+    updateAnimationClock(timestamp);
     lastFrame = timestamp;
 
     bars.forEach((bar, index) => {
       const position = index / Math.max(1, bars.length - 1);
       const targetLevel = prefersReducedMotion
         ? getReducedMotionLevel(position)
-        : getSpectrumLevel(position, index, playbackSeconds);
+        : getSpectrumLevel(position, index, animationSeconds);
 
-      bar.level += (targetLevel - bar.level) * 0.24;
+      bar.level += (targetLevel - bar.level) * 0.30;
 
       const height = MIN_HEIGHT + bar.level * (MAX_HEIGHT - MIN_HEIGHT);
       const y = CENTER_Y - height / 2;
