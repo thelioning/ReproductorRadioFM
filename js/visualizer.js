@@ -8,11 +8,11 @@
 
   const START_X = 82;
   const END_X = 1118;
-  const BAR_STEP = 13;
-  const BAR_WIDTH = 7;
-  const CENTER_Y = 73;
-  const MIN_HEIGHT = 28;
-  const MAX_HEIGHT = 126;
+  const BAR_STEP = 14;
+  const BAR_WIDTH = 5.5;
+  const CENTER_Y = 92;
+  const MIN_HEIGHT = 32;
+  const MAX_HEIGHT = 118;
   const FRAME_INTERVAL = 1000 / 24;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,9 +24,9 @@
     const rect = document.createElementNS(SVG_NS, "rect");
 
     rect.setAttribute("x", x);
-    rect.setAttribute("y", CENTER_Y - 42);
+    rect.setAttribute("y", CENTER_Y - 40);
     rect.setAttribute("width", BAR_WIDTH);
-    rect.setAttribute("height", 84);
+    rect.setAttribute("height", 80);
     rect.setAttribute("rx", BAR_WIDTH / 2);
     rect.setAttribute("ry", BAR_WIDTH / 2);
 
@@ -73,10 +73,10 @@
       let height;
 
       if (prefersReducedMotion) {
-        height = 86;
+        height = 82;
       } else {
         const level = getVisualLevel(bar, time);
-        const activity = playing ? 1 : 0.58;
+        const activity = playing ? 1 : 0.54;
         height = MIN_HEIGHT + level * (MAX_HEIGHT - MIN_HEIGHT) * bar.strength * activity;
       }
 
@@ -86,7 +86,7 @@
 
       bar.rect.setAttribute("y", y.toFixed(2));
       bar.rect.setAttribute("height", height.toFixed(2));
-      bar.rect.setAttribute("opacity", playing ? "1" : "0.72");
+      bar.rect.setAttribute("opacity", playing ? "0.62" : "0.40");
     });
   }
 
