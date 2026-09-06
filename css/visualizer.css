@@ -42,16 +42,21 @@
 }
 
 .brand-static__glow {
-  opacity: 0.30;
+  opacity: 0.24;
 }
 
 .brand-static__text {
-  opacity: 0.98;
+  opacity: 0.92;
+}
+
+#equalizerBars {
+  pointer-events: none;
 }
 
 #equalizerBars rect {
   fill: url(#brandStaticGradient);
-  opacity: 0.58;
+  opacity: 1;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.18));
 }
 
 .controls {
