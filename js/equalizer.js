@@ -85,7 +85,6 @@
   function restoreSettings() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-
       if (!saved || !Array.isArray(saved.bands) || saved.bands.length !== sliders.length) {
         return;
       }
@@ -106,9 +105,7 @@
   }
 
   function applyBandValues() {
-    if (!graphReady) {
-      return;
-    }
+    if (!graphReady) return;
 
     filters.forEach((filter, index) => {
       filter.gain.setTargetAtTime(Number(sliders[index].value), audioContext.currentTime, 0.015);
@@ -116,10 +113,7 @@
   }
 
   function applyMasterGain() {
-    if (!graphReady) {
-      return;
-    }
-
+    if (!graphReady) return;
     masterGain.gain.setTargetAtTime(dbToGain(masterSelect.value), audioContext.currentTime, 0.015);
   }
 
@@ -131,9 +125,7 @@
     }
 
     const values = PRESETS[name];
-    if (!values) {
-      return;
-    }
+    if (!values) return;
 
     sliders.forEach((slider, index) => {
       slider.value = String(values[index]);
@@ -146,9 +138,7 @@
   }
 
   async function testStreamCors() {
-    if (corsChecked) {
-      return corsAllowed;
-    }
+    if (corsChecked) return corsAllowed;
 
     corsChecked = true;
     const controller = new AbortController();
@@ -191,10 +181,18 @@
     });
   }
 
-  async function ensureGraph() {
-    if (graphReady) {
-      return true;
+  async function restorePlainPlayback(wasPlaying) {
+    try {
+      radio.removeAttribute("crossorigin");
+      radio.load();
+      if (wasPlaying) await radio.play();
+    } catch (error) {
+      console.error("No se pudo restaurar automáticamente la transmisión:", error);
     }
+  }
+
+  async function ensureGraph() {
+    if (graphReady) return true;
 
     if (!AudioContextClass) {
       setMessage("Este navegador no admite Web Audio API.", true);
@@ -202,8 +200,8 @@
     }
 
     setMessage("Comprobando compatibilidad del servidor de audio...");
-
     const canProcess = await testStreamCors();
+
     if (!canProcess) {
       setMessage("El servidor de la emisora no autoriza el procesamiento de audio en el navegador. La transmisión sigue funcionando normalmente.", true);
       return false;
@@ -212,9 +210,7 @@
     const wasPlaying = typeof isRadioPlaying === "function" && isRadioPlaying();
 
     try {
-      if (wasPlaying) {
-        radio.pause();
-      }
+      if (wasPlaying) radio.pause();
 
       radio.crossOrigin = "anonymous";
       radio.load();
@@ -226,9 +222,11 @@
       masterGain = audioContext.createGain();
       sourceNode = audioContext.createMediaElementSource(radio);
 
+      /* Ruta seca: bypass real, sin filtros ni ganancia general. */
       sourceNode.connect(dryGain);
-      dryGain.connect(masterGain);
+      dryGain.connect(audioContext.destination);
 
+      /* Ruta procesada: 10 bandas -> wet -> ganancia general -> salida. */
       sourceNode.connect(filters[0]);
       for (let index = 0; index < filters.length - 1; index += 1) {
         filters[index].connect(filters[index + 1]);
@@ -239,39 +237,24 @@
 
       dryGain.gain.value = 1;
       wetGain.gain.value = 0;
+      graphReady = true;
       applyBandValues();
       applyMasterGain();
-      graphReady = true;
 
-      if (wasPlaying) {
-        await radio.play();
-      }
+      if (wasPlaying) await radio.play();
 
       setMessage("Ecualizador listo. Los cambios se aplican al audio real.");
       return true;
     } catch (error) {
       console.error("No se pudo inicializar el ecualizador real:", error);
       setMessage("No fue posible inicializar el procesamiento de audio. La radio se restaurará sin ecualizador.", true);
-
-      try {
-        radio.removeAttribute("crossorigin");
-        radio.load();
-        if (wasPlaying) {
-          await radio.play();
-        }
-      } catch (restoreError) {
-        console.error("No se pudo restaurar automáticamente la transmisión:", restoreError);
-      }
-
+      await restorePlainPlayback(wasPlaying);
       return false;
     }
   }
 
   async function setEnabled(nextEnabled) {
-    if (enabling) {
-      return;
-    }
-
+    if (enabling) return;
     enabling = true;
 
     try {
@@ -283,9 +266,7 @@
           return;
         }
 
-        if (audioContext.state === "suspended") {
-          await audioContext.resume();
-        }
+        if (audioContext.state === "suspended") await audioContext.resume();
 
         dryGain.gain.setTargetAtTime(0, audioContext.currentTime, 0.02);
         wetGain.gain.setTargetAtTime(1, audioContext.currentTime, 0.02);
@@ -307,14 +288,10 @@
     }
   }
 
-  toggle.addEventListener("click", () => {
-    setEnabled(!enabled);
-  });
+  toggle.addEventListener("click", () => setEnabled(!enabled));
 
   presetButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      setPreset(button.dataset.eqPreset);
-    });
+    button.addEventListener("click", () => setPreset(button.dataset.eqPreset));
   });
 
   sliders.forEach((slider) => {
