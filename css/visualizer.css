@@ -20,33 +20,20 @@
   height: 100%;
 }
 
-.brand-static__base,
-.brand-static__illuminated-glow,
-.brand-static__illuminated-text {
+.brand-spectrum__text {
   font-family: "Arial Black", Arial, Helvetica, sans-serif;
   font-size: 108px;
   font-weight: 900;
   letter-spacing: 2px;
-}
-
-/* El letrero existe, pero permanece totalmente apagado sin luz. */
-.brand-static__base {
-  opacity: 0;
-}
-
-/* El halo acompaña la zona iluminada sin dibujar barras sobre las letras. */
-.brand-static__illuminated-glow {
-  opacity: 0.28;
-}
-
-/* Las letras reveladas son sólidas; la máscara decide qué zonas pueden verse. */
-.brand-static__illuminated-text {
   opacity: 1;
 }
 
-#lightMaskHalos rect,
-#lightMaskCores rect {
-  fill: #ffffff;
+/*
+ * Las barras del espectro no se dibujan en pantalla.
+ * Funcionan únicamente como ventanas de recorte sobre el texto.
+ */
+#spectrumWindows rect {
+  pointer-events: none;
 }
 
 .controls {
@@ -63,9 +50,7 @@
     margin: 12px 0 10px;
   }
 
-  .brand-static__base,
-  .brand-static__illuminated-glow,
-  .brand-static__illuminated-text {
+  .brand-spectrum__text {
     font-size: 100px;
   }
 }
@@ -76,9 +61,7 @@
     margin: 10px 0 8px;
   }
 
-  .brand-static__base,
-  .brand-static__illuminated-glow,
-  .brand-static__illuminated-text {
+  .brand-spectrum__text {
     font-size: 90px;
   }
 
