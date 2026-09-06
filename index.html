@@ -32,12 +32,22 @@
             <stop offset="1" stop-color="#8c6cff"></stop>
           </linearGradient>
 
-          <clipPath id="spectrumClip" clipPathUnits="userSpaceOnUse">
+          <mask
+            id="spectrumMask"
+            x="0"
+            y="0"
+            width="1200"
+            height="190"
+            maskUnits="userSpaceOnUse"
+            maskContentUnits="userSpaceOnUse"
+            style="mask-type: luminance;"
+          >
+            <rect x="0" y="0" width="1200" height="190" fill="#000000"></rect>
             <g id="spectrumWindows"></g>
-          </clipPath>
+          </mask>
         </defs>
 
-        <g class="brand-spectrum" clip-path="url(#spectrumClip)">
+        <g class="brand-spectrum" mask="url(#spectrumMask)">
           <text
             class="brand-spectrum__text"
             x="600"
