@@ -2,21 +2,19 @@
   const SVG_NS = "http://www.w3.org/2000/svg";
   const maskHaloGroup = document.getElementById("lightMaskHalos");
   const maskCoreGroup = document.getElementById("lightMaskCores");
-  const beamGroup = document.getElementById("lightBeams");
 
-  if (!maskHaloGroup || !maskCoreGroup || !beamGroup) {
+  if (!maskHaloGroup || !maskCoreGroup) {
     return;
   }
 
   const START_X = 82;
   const END_X = 1118;
-  const BAR_STEP = 19;
-  const CORE_WIDTH = 12;
-  const HALO_WIDTH = 34;
-  const BEAM_WIDTH = 24;
+  const BAR_STEP = 18;
+  const CORE_WIDTH = 24;
+  const HALO_WIDTH = 66;
   const CENTER_Y = 94;
-  const MIN_HEIGHT = 24;
-  const MAX_HEIGHT = 170;
+  const MIN_HEIGHT = 30;
+  const MAX_HEIGHT = 180;
   const FRAME_INTERVAL = 1000 / 30;
   const WAVE_SPEED = 0.00038;
 
@@ -57,14 +55,7 @@
       CORE_WIDTH / 2
     );
 
-    const beam = createRect(
-      beamGroup,
-      x - (BEAM_WIDTH - CORE_WIDTH) / 2,
-      BEAM_WIDTH,
-      BEAM_WIDTH / 2
-    );
-
-    bars.push({ halo, core, beam, index });
+    bars.push({ halo, core, index });
   }
 
   function buildBars() {
@@ -114,7 +105,6 @@
     bars.forEach((bar) => {
       setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
       setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
-      setBarGeometry(bar.beam, y, MIN_HEIGHT, 0);
     });
   }
 
@@ -162,26 +152,28 @@
         ? getReducedMotionLevel(position)
         : getSequenceLevel(position, animationTime);
 
-      const level = rawLevel < 0.045 ? 0 : Math.pow(rawLevel, 1.28);
+      const level = rawLevel < 0.04 ? 0 : Math.pow(rawLevel, 1.2);
 
       if (level === 0) {
         const y = CENTER_Y - MIN_HEIGHT / 2;
         setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
         setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
-        setBarGeometry(bar.beam, y, MIN_HEIGHT, 0);
         return;
       }
 
       const height = MIN_HEIGHT + level * (MAX_HEIGHT - MIN_HEIGHT);
       const y = CENTER_Y - height / 2;
 
-      const coreOpacity = clamp(0.28 + level * 0.72, 0, 1);
-      const haloOpacity = clamp(0.08 + level * 0.34, 0, 0.42);
-      const beamOpacity = clamp(0.035 + level * 0.11, 0, 0.145);
+      /*
+       * Los rectángulos ya no se dibujan sobre el letrero.
+       * Solo controlan la máscara: el núcleo revela letras sólidas y
+       * el halo suaviza la transición hacia la oscuridad.
+       */
+      const coreOpacity = clamp(0.62 + level * 0.38, 0, 1);
+      const haloOpacity = clamp(0.12 + level * 0.42, 0, 0.54);
 
       setBarGeometry(bar.halo, y, height, haloOpacity);
       setBarGeometry(bar.core, y, height, coreOpacity);
-      setBarGeometry(bar.beam, y, height, beamOpacity);
     });
   }
 
