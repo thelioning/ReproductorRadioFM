@@ -16,11 +16,7 @@
       <span class="live-badge">LIVE</span>
     </header>
 
-    <audio
-      id="radio"
-      src="https://a8.my-control-panel.com:9360/radio.mp3"
-      preload="none">
-    </audio>
+    <audio id="radio" src="https://a8.my-control-panel.com:9360/radio.mp3" preload="none"></audio>
 
     <section class="controls" aria-label="Controles de reproducción">
       <button id="playButton" class="play-button" type="button" aria-label="Reproducir">
@@ -28,21 +24,19 @@
         <span class="play-button__icon play-button__icon--pause" aria-hidden="true"></span>
       </button>
 
-      <button id="muteButton" class="control-button" type="button" aria-label="Silenciar">
-        🔊
-      </button>
+      <div class="volume-group">
+        <button id="muteButton" class="volume-button" type="button" aria-label="Silenciar">
+          <span class="volume-button__speaker" aria-hidden="true"></span>
+          <span class="volume-button__waves" aria-hidden="true"></span>
+        </button>
 
-      <div class="volume-control">
-        <label for="volumeControl">Volumen</label>
-        <input
-          id="volumeControl"
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value="0.80"
-          aria-label="Volumen">
-        <span id="volumeValue">80%</span>
+        <div class="volume-control">
+          <div class="volume-control__header">
+            <label for="volumeControl">Volumen</label>
+            <span id="volumeValue">80%</span>
+          </div>
+          <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.80" aria-label="Volumen">
+        </div>
       </div>
     </section>
 
