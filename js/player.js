@@ -3,7 +3,6 @@ const muteButton = document.getElementById("muteButton");
 const volumeControl = document.getElementById("volumeControl");
 const volumeValue = document.getElementById("volumeValue");
 const status = document.getElementById("status");
-const radio = document.getElementById("radio");
 
 function updateVolumeUI() {
   const volume = getVolume();
@@ -37,7 +36,6 @@ playButton.addEventListener("click", async () => {
   } catch (error) {
     console.error("No se pudo iniciar la transmisión:", error);
     status.textContent = "Error al conectar con la emisora";
-    updatePlayUI();
   }
 });
 
@@ -47,7 +45,7 @@ muteButton.addEventListener("click", () => {
 });
 
 volumeControl.addEventListener("input", (event) => {
-  setVolume(Number(event.target.value));
+  setVolume(event.target.value);
   updateVolumeUI();
 });
 
