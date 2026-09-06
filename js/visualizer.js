@@ -1,38 +1,70 @@
 (() => {
   const SVG_NS = "http://www.w3.org/2000/svg";
-  const barsGroup = document.getElementById("equalizerBars");
+  const maskHaloGroup = document.getElementById("lightMaskHalos");
+  const maskCoreGroup = document.getElementById("lightMaskCores");
+  const beamGroup = document.getElementById("lightBeams");
 
-  if (!barsGroup) {
+  if (!maskHaloGroup || !maskCoreGroup || !beamGroup) {
     return;
   }
 
   const START_X = 82;
   const END_X = 1118;
-  const BAR_STEP = 15;
-  const BAR_WIDTH = 10;
+  const BAR_STEP = 19;
+  const CORE_WIDTH = 12;
+  const HALO_WIDTH = 34;
+  const BEAM_WIDTH = 24;
   const CENTER_Y = 94;
-  const MIN_HEIGHT = 18;
-  const MAX_HEIGHT = 154;
+  const MIN_HEIGHT = 24;
+  const MAX_HEIGHT = 170;
   const FRAME_INTERVAL = 1000 / 30;
-  const WAVE_SPEED = 0.00042;
+  const WAVE_SPEED = 0.00038;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bars = [];
-  let lastFrame = 0;
 
-  function createBar(x, index) {
+  let lastFrame = 0;
+  let lastTimestamp = 0;
+  let animationTime = 0;
+
+  function createRect(group, x, width, radius) {
     const rect = document.createElementNS(SVG_NS, "rect");
 
     rect.setAttribute("x", x);
     rect.setAttribute("y", CENTER_Y - MIN_HEIGHT / 2);
-    rect.setAttribute("width", BAR_WIDTH);
+    rect.setAttribute("width", width);
     rect.setAttribute("height", MIN_HEIGHT);
-    rect.setAttribute("rx", 4);
-    rect.setAttribute("ry", 4);
+    rect.setAttribute("rx", radius);
+    rect.setAttribute("ry", radius);
     rect.setAttribute("opacity", "0");
 
-    barsGroup.appendChild(rect);
-    bars.push({ rect, index });
+    group.appendChild(rect);
+    return rect;
+  }
+
+  function createBar(x, index) {
+    const halo = createRect(
+      maskHaloGroup,
+      x - (HALO_WIDTH - CORE_WIDTH) / 2,
+      HALO_WIDTH,
+      HALO_WIDTH / 2
+    );
+
+    const core = createRect(
+      maskCoreGroup,
+      x,
+      CORE_WIDTH,
+      CORE_WIDTH / 2
+    );
+
+    const beam = createRect(
+      beamGroup,
+      x - (BEAM_WIDTH - CORE_WIDTH) / 2,
+      BEAM_WIDTH,
+      BEAM_WIDTH / 2
+    );
+
+    bars.push({ halo, core, beam, index });
   }
 
   function buildBars() {
@@ -59,56 +91,101 @@
   }
 
   function getSequenceLevel(position, time) {
-    const waveA = gaussian(position - waveCenter(time, 0.00, 1), 0.13);
-    const waveB = gaussian(position - waveCenter(time, 0.34, -1), 0.16) * 0.82;
-    const waveC = gaussian(position - waveCenter(time, 0.67, 1), 0.11) * 0.68;
+    const waveA = gaussian(position - waveCenter(time, 0.00, 1), 0.115);
+    const waveB = gaussian(position - waveCenter(time, 0.33, -1), 0.145) * 0.88;
+    const waveC = gaussian(position - waveCenter(time, 0.66, 1), 0.105) * 0.74;
 
-    const ripple = 0.5 + 0.5 * Math.sin(time * 0.006 + position * 34);
-    const breathing = 0.72 + 0.28 * Math.sin(time * 0.0018 + position * 7);
+    const ripple = 0.5 + 0.5 * Math.sin(time * 0.0062 + position * 31);
+    const pulse = 0.78 + 0.22 * Math.sin(time * 0.002 + position * 8.5);
 
-    const level = Math.max(waveA, waveB, waveC) * (0.72 + ripple * 0.28) * breathing;
+    const level = Math.max(waveA, waveB, waveC) * (0.76 + ripple * 0.24) * pulse;
     return clamp(level, 0, 1);
+  }
+
+  function setBarGeometry(rect, y, height, opacity) {
+    rect.setAttribute("y", y.toFixed(2));
+    rect.setAttribute("height", height.toFixed(2));
+    rect.setAttribute("opacity", opacity.toFixed(3));
+  }
+
+  function hideBars() {
+    const y = CENTER_Y - MIN_HEIGHT / 2;
+
+    bars.forEach((bar) => {
+      setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
+      setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
+      setBarGeometry(bar.beam, y, MIN_HEIGHT, 0);
+    });
+  }
+
+  function getReducedMotionLevel(position) {
+    const fixedWaveA = gaussian(position - 0.28, 0.15);
+    const fixedWaveB = gaussian(position - 0.70, 0.13) * 0.78;
+    return Math.max(fixedWaveA, fixedWaveB);
   }
 
   function render(time) {
     requestAnimationFrame(render);
 
-    if (document.hidden || time - lastFrame < FRAME_INTERVAL) {
-      return;
+    if (!lastTimestamp) {
+      lastTimestamp = time;
     }
-
-    lastFrame = time;
 
     const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
 
+    if (!playing) {
+      lastTimestamp = time;
+      hideBars();
+      return;
+    }
+
+    if (document.hidden) {
+      lastTimestamp = time;
+      return;
+    }
+
+    if (time - lastFrame < FRAME_INTERVAL) {
+      return;
+    }
+
+    const delta = Math.min(50, Math.max(0, time - lastTimestamp));
+    lastTimestamp = time;
+    lastFrame = time;
+
+    if (!prefersReducedMotion) {
+      animationTime += delta;
+    }
+
     bars.forEach((bar, index) => {
       const position = index / Math.max(1, bars.length - 1);
+      const rawLevel = prefersReducedMotion
+        ? getReducedMotionLevel(position)
+        : getSequenceLevel(position, animationTime);
 
-      if (!playing) {
-        bar.rect.setAttribute("opacity", "0");
-        bar.rect.setAttribute("height", MIN_HEIGHT);
-        bar.rect.setAttribute("y", CENTER_Y - MIN_HEIGHT / 2);
+      const level = rawLevel < 0.045 ? 0 : Math.pow(rawLevel, 1.28);
+
+      if (level === 0) {
+        const y = CENTER_Y - MIN_HEIGHT / 2;
+        setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
+        setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
+        setBarGeometry(bar.beam, y, MIN_HEIGHT, 0);
         return;
-      }
-
-      let level;
-
-      if (prefersReducedMotion) {
-        level = 0.42;
-      } else {
-        level = getSequenceLevel(position, time);
       }
 
       const height = MIN_HEIGHT + level * (MAX_HEIGHT - MIN_HEIGHT);
       const y = CENTER_Y - height / 2;
-      const opacity = 0.76 + level * 0.24;
 
-      bar.rect.setAttribute("y", y.toFixed(2));
-      bar.rect.setAttribute("height", height.toFixed(2));
-      bar.rect.setAttribute("opacity", opacity.toFixed(2));
+      const coreOpacity = clamp(0.28 + level * 0.72, 0, 1);
+      const haloOpacity = clamp(0.08 + level * 0.34, 0, 0.42);
+      const beamOpacity = clamp(0.035 + level * 0.11, 0, 0.145);
+
+      setBarGeometry(bar.halo, y, height, haloOpacity);
+      setBarGeometry(bar.core, y, height, coreOpacity);
+      setBarGeometry(bar.beam, y, height, beamOpacity);
     });
   }
 
   buildBars();
+  hideBars();
   requestAnimationFrame(render);
 })();
