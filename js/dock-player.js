@@ -9,8 +9,10 @@
     return;
   }
 
-  const STORAGE_KEY = "alcatraz-radio-dock-hidden";
-  const LOGO_PNG = "assets/alcatraz-logo.png";
+  const config = window.STATION_CONFIG || {};
+  const storageNamespace = config.storageNamespace || "radio-player";
+  const STORAGE_KEY = `${storageNamespace}-dock-hidden`;
+  const mediaSessionEnabled = config.features?.mediaSession !== false;
 
   function setDockHidden(hidden, persist = true) {
     dock.classList.toggle("is-hidden", hidden);
@@ -32,7 +34,7 @@
     dockPlayButton.classList.toggle("is-playing", playing);
     dockPlayButton.setAttribute("aria-label", playing ? "Pausar transmisión" : "Reproducir transmisión");
 
-    if ("mediaSession" in navigator) {
+    if (mediaSessionEnabled && "mediaSession" in navigator) {
       navigator.mediaSession.playbackState = playing ? "playing" : "paused";
     }
   }
@@ -98,7 +100,7 @@
   radio.addEventListener("volumechange", syncMuteUI);
 
   function registerMediaAction(action, handler) {
-    if (!("mediaSession" in navigator)) {
+    if (!mediaSessionEnabled || !("mediaSession" in navigator)) {
       return;
     }
 
@@ -109,14 +111,16 @@
     }
   }
 
-  if ("mediaSession" in navigator && "MediaMetadata" in window) {
+  if (mediaSessionEnabled && "mediaSession" in navigator && "MediaMetadata" in window) {
+    const artwork = config.logo
+      ? [{ src: config.logo, type: "image/png" }]
+      : [];
+
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "Alcatraz Radio FM",
-      artist: "Transmisión en vivo",
-      album: "Alternative Like You",
-      artwork: [
-        { src: LOGO_PNG, sizes: "187x81", type: "image/png" }
-      ]
+      title: config.name || "Radio FM",
+      artist: config.tagline || "Transmisión en vivo",
+      album: config.slogan || "Radio en vivo",
+      artwork
     });
 
     registerMediaAction("play", startPlayback);
