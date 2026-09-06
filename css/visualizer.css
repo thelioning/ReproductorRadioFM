@@ -5,8 +5,8 @@
 .brand-static {
   position: relative;
   width: 100%;
-  height: 180px;
-  margin: 28px 0 22px;
+  height: 122px;
+  margin: 14px 0 12px;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -15,13 +15,13 @@
 .brand-static::before {
   content: "";
   position: absolute;
-  inset: 18% 7%;
+  inset: 10% 7%;
   border-radius: 50%;
   background:
     radial-gradient(circle at 18% 50%, rgba(255, 90, 200, 0.12), transparent 32%),
     radial-gradient(circle at 50% 50%, rgba(87, 230, 200, 0.08), transparent 34%),
     radial-gradient(circle at 82% 50%, rgba(140, 108, 255, 0.12), transparent 32%);
-  filter: blur(24px);
+  filter: blur(20px);
   pointer-events: none;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .controls {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 @media (max-width: 700px) {
@@ -59,8 +59,8 @@
   }
 
   .brand-static {
-    height: 150px;
-    margin-top: 24px;
+    height: 102px;
+    margin: 12px 0 10px;
   }
 
   .brand-static__glow,
@@ -71,8 +71,8 @@
 
 @media (max-width: 520px) {
   .brand-static {
-    height: 112px;
-    margin: 20px 0 18px;
+    height: 82px;
+    margin: 10px 0 8px;
   }
 
   .brand-static__glow,
@@ -81,6 +81,6 @@
   }
 
   .controls {
-    margin-top: 4px;
+    margin-top: 2px;
   }
 }
