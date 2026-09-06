@@ -7,14 +7,22 @@
     return;
   }
 
-  const START_X = 86;
-  const END_X = 1114;
-  const BAR_STEP = 17;
-  const BAR_WIDTH = 12;
+  /*
+   * El espectro funciona como una plantilla invisible sobre el letrero.
+   * Cada barra es una abertura independiente que revela únicamente la
+   * porción de ALCATRAZ RADIO FM situada detrás de ella.
+   */
+  const START_X = 72;
+  const END_X = 1128;
+  const BAR_STEP = 16;
+  const BAR_WIDTH = 9;
   const CENTER_Y = 94;
-  const MIN_HEIGHT = 12;
-  const MAX_HEIGHT = 176;
+  const MIN_HEIGHT = 6;
+  const MAX_HEIGHT = 178;
   const FRAME_INTERVAL = 1000 / 30;
+
+  /* El video de referencia repite prácticamente el patrón cada ~9.8 s. */
+  const LOOP_SECONDS = 9.86;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bars = [];
@@ -37,6 +45,11 @@
     return Math.min(direct, 1 - direct);
   }
 
+  function hash01(value) {
+    const x = Math.sin(value * 91.733 + 17.19) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
   function createBar(x, index) {
     const rect = document.createElementNS(SVG_NS, "rect");
 
@@ -50,10 +63,17 @@
 
     spectrumGroup.appendChild(rect);
 
+    const randomA = hash01(index + 1);
+    const randomB = hash01(index + 101);
+    const randomC = hash01(index + 211);
+
     bars.push({
       rect,
       index,
-      level: 0
+      level: 0,
+      phase: randomA * Math.PI * 2,
+      speed: 2.1 + randomB * 2.2,
+      gain: 0.76 + randomC * 0.30
     });
   }
 
@@ -90,31 +110,55 @@
     animationSeconds += (delta / 1000) * playbackRate;
   }
 
-  function getSpectrumLevel(position, index, time) {
-    const centerA = (time * 0.10) % 1;
-    const centerB = (1 - ((time * 0.073 + 0.31) % 1) + 1) % 1;
-    const centerC = (time * 0.128 + 0.61) % 1;
+  function getReferenceEnvelope(position, time) {
+    const phase = (time % LOOP_SECONDS) / LOOP_SECONDS;
 
-    const packetA = gaussian(circularDistance(position, centerA), 0.12);
-    const packetB = gaussian(circularDistance(position, centerB), 0.15) * 0.88;
-    const packetC = gaussian(circularDistance(position, centerC), 0.10) * 0.78;
-    const travellingEnvelope = Math.max(packetA, packetB, packetC);
+    /*
+     * Dos grupos principales recorren el espectro en sentidos opuestos.
+     * Sus posiciones reproducen la secuencia observada en el segundo video:
+     * izquierda + centro/derecha -> centro -> derecha -> izquierda + derecha.
+     */
+    const centerA = (0.10 + phase * 1.20) % 1;
+    const centerB = (0.64 - phase + 1) % 1;
 
-    const detailA = 0.5 + 0.5 * Math.sin(index * 0.62 + time * 4.25);
-    const detailB = 0.5 + 0.5 * Math.sin(index * 0.29 - time * 2.75);
-    const detailC = 0.5 + 0.5 * Math.sin(index * 0.14 + time * 1.45);
+    const packetA = gaussian(circularDistance(position, centerA), 0.125);
+    const packetB = gaussian(circularDistance(position, centerB), 0.115) * 0.82;
 
-    const texture = detailA * 0.50 + detailB * 0.30 + detailC * 0.20;
-    const pulse = 0.78 + 0.22 * Math.sin(time * 2.15 + position * 8.5);
+    /* Tercer grupo suave para evitar una repetición demasiado mecánica. */
+    const centerC = (0.34 + phase * 0.58) % 1;
+    const packetC = gaussian(circularDistance(position, centerC), 0.075) * 0.34;
 
-    const mixed = 0.08 + (travellingEnvelope * 0.66 + texture * 0.34) * pulse;
-    return clamp(Math.pow(mixed, 1.22), 0, 1);
+    return clamp(Math.max(packetA, packetB, packetC), 0, 1);
+  }
+
+  function getSpectrumLevel(bar, position, time) {
+    const envelope = getReferenceEnvelope(position, time);
+
+    /*
+     * Cada barra respira de manera individual. Así las columnas vecinas
+     * pertenecen al mismo grupo, pero no crecen ni decrecen como una sola pieza.
+     */
+    const individualWave = 0.72 + 0.28 * Math.sin(time * bar.speed + bar.phase);
+    const fineMotion = 0.86 + 0.14 * Math.sin(time * 5.2 + bar.index * 1.17);
+
+    /* Variación lenta de la energía general para imitar frases musicales. */
+    const phrase = 0.88 + 0.12 * Math.sin((time / LOOP_SECONDS) * Math.PI * 4 - 0.7);
+
+    const active = envelope * individualWave * fineMotion * phrase * bar.gain;
+
+    /*
+     * En zonas sin un grupo activo permanecen aperturas mínimas, como los
+     * pequeños puntos centrales del espectro de referencia.
+     */
+    const idle = 0.015 + 0.020 * (0.5 + 0.5 * Math.sin(time * 2.4 + bar.phase));
+
+    return clamp(Math.max(idle, active), 0, 1);
   }
 
   function getReducedMotionLevel(position) {
-    const packetA = gaussian(circularDistance(position, 0.27), 0.13);
-    const packetB = gaussian(circularDistance(position, 0.68), 0.15) * 0.82;
-    return clamp(0.10 + Math.max(packetA, packetB) * 0.90, 0, 1);
+    const packetA = gaussian(circularDistance(position, 0.18), 0.13);
+    const packetB = gaussian(circularDistance(position, 0.70), 0.12) * 0.78;
+    return clamp(Math.max(0.02, packetA, packetB), 0, 1);
   }
 
   function render(timestamp) {
@@ -139,11 +183,14 @@
       const position = index / Math.max(1, bars.length - 1);
       const targetLevel = prefersReducedMotion
         ? getReducedMotionLevel(position)
-        : getSpectrumLevel(position, index, animationSeconds);
+        : getSpectrumLevel(bar, position, animationSeconds);
 
-      bar.level += (targetLevel - bar.level) * 0.30;
+      /* Ataque algo más rápido y caída más lenta: movimiento más natural. */
+      const response = targetLevel > bar.level ? 0.27 : 0.15;
+      bar.level += (targetLevel - bar.level) * response;
 
-      const height = MIN_HEIGHT + bar.level * (MAX_HEIGHT - MIN_HEIGHT);
+      const shapedLevel = Math.pow(clamp(bar.level, 0, 1), 0.92);
+      const height = MIN_HEIGHT + shapedLevel * (MAX_HEIGHT - MIN_HEIGHT);
       const y = CENTER_Y - height / 2;
 
       bar.rect.setAttribute("y", y.toFixed(2));
