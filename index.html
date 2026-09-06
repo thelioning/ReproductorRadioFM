@@ -32,24 +32,12 @@
             <stop offset="1" stop-color="#8c6cff"></stop>
           </linearGradient>
 
-          <linearGradient id="beamLightGradient" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#ffffff" stop-opacity="0"></stop>
-            <stop offset="0.28" stop-color="#ffffff" stop-opacity="0.32"></stop>
-            <stop offset="0.50" stop-color="#ffffff" stop-opacity="0.88"></stop>
-            <stop offset="0.72" stop-color="#ffffff" stop-opacity="0.32"></stop>
-            <stop offset="1" stop-color="#ffffff" stop-opacity="0"></stop>
-          </linearGradient>
-
           <filter id="brandStaticGlow" x="-20%" y="-60%" width="140%" height="220%">
-            <feGaussianBlur stdDeviation="5" result="blur"></feGaussianBlur>
+            <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
             <feMerge>
               <feMergeNode in="blur"></feMergeNode>
               <feMergeNode in="SourceGraphic"></feMergeNode>
             </feMerge>
-          </filter>
-
-          <filter id="beamGlow" x="-80%" y="-30%" width="260%" height="160%">
-            <feGaussianBlur stdDeviation="3.4"></feGaussianBlur>
           </filter>
 
           <mask id="brandLightMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1200" height="190">
@@ -91,8 +79,6 @@
             fill="url(#brandStaticGradient)"
           >ALCATRAZ RADIO FM</text>
         </g>
-
-        <g id="lightBeams" filter="url(#beamGlow)"></g>
       </svg>
     </section>
 
