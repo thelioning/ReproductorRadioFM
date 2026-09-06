@@ -19,6 +19,50 @@
 
     <audio id="radio" src="https://a8.my-control-panel.com:9360/radio.mp3" preload="none"></audio>
 
+    <section class="brand-static" aria-label="Identidad visual de Alcatraz Radio FM">
+      <svg viewBox="0 0 1200 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="brandStaticGradient" x1="80" y1="0" x2="1120" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ff5ac8"></stop>
+            <stop offset="0.14" stop-color="#ff8a4c"></stop>
+            <stop offset="0.30" stop-color="#ffd166"></stop>
+            <stop offset="0.47" stop-color="#87f05f"></stop>
+            <stop offset="0.64" stop-color="#57e6c8"></stop>
+            <stop offset="0.81" stop-color="#58b8ff"></stop>
+            <stop offset="1" stop-color="#8c6cff"></stop>
+          </linearGradient>
+          <filter id="brandStaticGlow" x="-20%" y="-60%" width="140%" height="220%">
+            <feGaussianBlur stdDeviation="5" result="blur"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <text
+          class="brand-static__glow"
+          x="600"
+          y="118"
+          text-anchor="middle"
+          textLength="1040"
+          lengthAdjust="spacingAndGlyphs"
+          fill="url(#brandStaticGradient)"
+          filter="url(#brandStaticGlow)"
+        >ALCATRAZ RADIO FM</text>
+
+        <text
+          class="brand-static__text"
+          x="600"
+          y="118"
+          text-anchor="middle"
+          textLength="1040"
+          lengthAdjust="spacingAndGlyphs"
+          fill="url(#brandStaticGradient)"
+        >ALCATRAZ RADIO FM</text>
+      </svg>
+    </section>
+
     <section class="controls" aria-label="Controles de reproducción">
       <button id="playButton" class="play-button" type="button" aria-label="Reproducir">
         <span class="play-button__icon play-button__icon--play" aria-hidden="true"></span>
@@ -46,11 +90,9 @@
     </section>
 
     <p id="status" class="status" aria-live="polite">Radio detenida</p>
-    <p id="audioDebug" class="audio-debug" aria-live="polite"></p>
   </main>
 
   <script src="js/audio-engine.js"></script>
   <script src="js/player.js"></script>
-  <script src="js/visualizer.js"></script>
 </body>
 </html>
