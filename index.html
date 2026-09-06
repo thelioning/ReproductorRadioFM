@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alcatraz Radio FM</title>
+  <title>Radio Player</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/visualizer.css">
   <link rel="stylesheet" href="css/equalizer.css">
   <link rel="stylesheet" href="css/dock-player.css">
 </head>
 <body>
-  <main class="player" aria-label="Reproductor de Alcatraz Radio FM">
+  <main class="player" aria-label="Reproductor de radio">
     <header class="player__header">
+      <img class="player__logo" data-station-logo alt="">
       <div>
-        <h1>Alcatraz Radio FM</h1>
-        <p>Transmisión en vivo</p>
+        <h1 id="stationName">Radio FM</h1>
+        <p id="stationTagline">Transmisión en vivo</p>
       </div>
-      <span class="live-badge">LIVE</span>
+      <span class="live-badge" data-station-live>LIVE</span>
     </header>
 
-    <audio id="radio" src="https://a8.my-control-panel.com:9360/radio.mp3" preload="none"></audio>
+    <audio id="radio" preload="none"></audio>
 
-    <section class="brand-static" aria-label="Identidad visual de Alcatraz Radio FM">
+    <section class="brand-static" aria-label="Identidad visual de la emisora">
       <svg viewBox="0 0 1200 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
           <linearGradient id="brandStaticGradient" x1="80" y1="0" x2="1120" y2="0" gradientUnits="userSpaceOnUse">
@@ -51,6 +52,7 @@
 
         <g class="brand-spectrum" mask="url(#spectrumMask)">
           <text
+            id="brandSpectrumText"
             class="brand-spectrum__text"
             x="600"
             y="118"
@@ -58,7 +60,7 @@
             textLength="1040"
             lengthAdjust="spacingAndGlyphs"
             fill="url(#brandStaticGradient)"
-          >ALCATRAZ RADIO FM</text>
+          >RADIO FM</text>
         </g>
       </svg>
     </section>
@@ -99,7 +101,7 @@
           </div>
           <div>
             <h2 id="equalizerTitle">Ecualizador</h2>
-            <p class="equalizer-panel__subtitle">Ajusta el sonido de Alcatraz Radio FM</p>
+            <p id="equalizerSubtitle" class="equalizer-panel__subtitle">Ajusta el sonido de la emisora</p>
           </div>
         </div>
 
@@ -212,16 +214,12 @@
     </section>
   </main>
 
-  <footer id="radioDock" class="radio-dock" aria-label="Reproductor fijo de Alcatraz Radio FM">
+  <footer id="radioDock" class="radio-dock" aria-label="Reproductor fijo de radio">
     <div class="radio-dock__brand">
-      <img
-        class="radio-dock__logo"
-        src="assets/alcatraz-logo.png"
-        alt="Logo de Alcatraz Radio FM"
-      >
+      <img class="radio-dock__logo" data-station-logo alt="">
       <div class="radio-dock__identity">
-        <span class="radio-dock__name">Alcatraz Radio FM</span>
-        <span class="radio-dock__live">LIVE</span>
+        <span class="radio-dock__name" data-station-name>Radio FM</span>
+        <span class="radio-dock__live" data-station-live>LIVE</span>
         <span class="radio-dock__live-dot" aria-hidden="true"></span>
       </div>
     </div>
@@ -249,17 +247,15 @@
     id="radioDockLauncher"
     class="radio-dock-launcher"
     type="button"
-    aria-label="Mostrar reproductor de Alcatraz Radio FM"
+    aria-label="Mostrar reproductor de radio"
     aria-hidden="true"
   >
-    <img
-      src="assets/alcatraz-logo.png"
-      alt=""
-      aria-hidden="true"
-    >
+    <img data-station-logo alt="" aria-hidden="true">
     <span class="radio-dock-launcher__arrow" aria-hidden="true">▲</span>
   </button>
 
+  <script src="config/station-config.js"></script>
+  <script src="js/station-bootstrap.js"></script>
   <script src="js/audio-engine.js"></script>
   <script src="js/player.js"></script>
   <script src="js/visualizer.js"></script>
