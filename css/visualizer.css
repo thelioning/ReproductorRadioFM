@@ -42,10 +42,15 @@
 }
 
 .brand-static__glow {
-  opacity: 0.30;
+  opacity: 0.18;
 }
 
 .brand-static__text {
+  opacity: 0.34;
+}
+
+#equalizerBars rect {
+  fill: url(#brandStaticGradient);
   opacity: 0.98;
 }
 
