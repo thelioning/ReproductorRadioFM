@@ -165,10 +165,24 @@
     requestAnimationFrame(render);
 
     const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
+    const muted = typeof isMuted === "function"
+      ? isMuted()
+      : audioElement.muted || audioElement.volume === 0;
 
+    /*
+     * Pausa real: el espectro desaparece.
+     * Mute: se conserva exactamente el último fotograma visible y se congela
+     * el reloj de la animación, simulando que el espectro se detuvo con el audio.
+     */
     if (!playing) {
       lastTimestamp = timestamp;
       hideSpectrum();
+      return;
+    }
+
+    if (muted) {
+      lastTimestamp = timestamp;
+      lastFrame = timestamp;
       return;
     }
 
