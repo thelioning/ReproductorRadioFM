@@ -6,10 +6,12 @@ const status = document.getElementById("status");
 
 function updateVolumeUI() {
   const volume = getVolume();
+  const muted = isMuted();
+
   volumeControl.value = volume;
   volumeValue.textContent = `${Math.round(volume * 100)}%`;
-  muteButton.textContent = isMuted() ? "🔇" : "🔊";
-  muteButton.setAttribute("aria-label", isMuted() ? "Activar sonido" : "Silenciar");
+  muteButton.classList.toggle("is-muted", muted);
+  muteButton.setAttribute("aria-label", muted ? "Activar sonido" : "Silenciar");
 }
 
 function updatePlayUI() {
