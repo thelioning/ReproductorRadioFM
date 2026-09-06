@@ -40,18 +40,10 @@
               font-weight="900"
             >ALCATRAZ RADIO FM</text>
           </clipPath>
-
-          <filter id="visualizerGlow" x="-30%" y="-50%" width="160%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur"></feGaussianBlur>
-            <feMerge>
-              <feMergeNode in="blur"></feMergeNode>
-              <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-          </filter>
         </defs>
 
         <g id="visualizerBaseBars" clip-path="url(#brandTextClip)"></g>
-        <g id="visualizerGlowBars" clip-path="url(#brandTextClip)" filter="url(#visualizerGlow)"></g>
+        <g id="visualizerGlowBars" clip-path="url(#brandTextClip)"></g>
         <g id="visualizerBars" clip-path="url(#brandTextClip)"></g>
         <g id="visualizerEdgeBars"></g>
       </svg>
@@ -84,6 +76,7 @@
     </section>
 
     <p id="status" class="status" aria-live="polite">Radio detenida</p>
+    <p id="audioDebug" class="audio-debug" aria-live="polite"></p>
   </main>
 
   <script src="js/audio-engine.js"></script>
