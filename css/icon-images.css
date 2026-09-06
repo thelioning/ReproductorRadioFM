@@ -1,0 +1,58 @@
+/* Control de volumen/mute mediante imagenes SVG. */
+.volume-button {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.volume-button::before,
+.volume-button::after,
+.volume-button__speaker,
+.volume-button__waves,
+.volume-button__speaker::after,
+.volume-button__waves::after {
+  display: none !important;
+  content: none !important;
+}
+
+.volume-button img {
+  width: 54px;
+  height: 54px;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.28));
+}
+
+.volume-button:hover {
+  transform: scale(1.04);
+  filter: brightness(1.06);
+}
+
+.volume-button:active {
+  transform: scale(0.98);
+}
+
+.volume-button.is-muted {
+  opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .volume-button,
+  .volume-button img {
+    width: 50px;
+    height: 50px;
+  }
+}
