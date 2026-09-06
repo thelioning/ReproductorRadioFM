@@ -10,7 +10,6 @@
   }
 
   const STORAGE_KEY = "alcatraz-radio-dock-hidden";
-  const LOGO_SVG = "https://www.alcatrazradiofm.net/wp-content/uploads/2021/02/site-logo-black.svg";
   const LOGO_PNG = "https://www.alcatrazradiofm.net/wp-content/uploads/2026/08/ALCATRAZ-LOGO-VECT-MARRON-1024x583.png";
 
   function setDockHidden(hidden, persist = true) {
@@ -116,7 +115,6 @@
       artist: "Transmisión en vivo",
       album: "Alternative Like You",
       artwork: [
-        { src: LOGO_SVG, type: "image/svg+xml" },
         { src: LOGO_PNG, sizes: "1024x583", type: "image/png" }
       ]
     });
