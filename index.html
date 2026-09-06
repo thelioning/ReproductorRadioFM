@@ -91,7 +91,7 @@
 
     <p id="status" class="status" aria-live="polite">Radio detenida</p>
 
-    <section id="equalizerPanel" class="equalizer-panel" aria-labelledby="equalizerTitle">
+    <section id="equalizerPanel" class="equalizer-panel is-collapsed" aria-labelledby="equalizerTitle">
       <div class="equalizer-panel__header">
         <div class="equalizer-panel__title-wrap">
           <div class="equalizer-panel__icon" aria-hidden="true">
@@ -103,93 +103,111 @@
           </div>
         </div>
 
-        <div class="eq-switch-wrap">
-          <button id="eqToggle" class="eq-switch" type="button" aria-pressed="false" aria-label="Activar o desactivar ecualizador"></button>
-          <span id="eqToggleLabel">Desactivado</span>
+        <div class="equalizer-panel__actions">
+          <div class="eq-switch-wrap">
+            <button id="eqToggle" class="eq-switch" type="button" aria-pressed="false" aria-label="Activar o desactivar ecualizador"></button>
+            <span id="eqToggleLabel">Desactivado</span>
+          </div>
+
+          <button
+            id="eqCollapse"
+            class="eq-collapse"
+            type="button"
+            aria-controls="equalizerContent"
+            aria-expanded="false"
+            aria-label="Mostrar controles del ecualizador"
+            title="Mostrar controles del ecualizador"
+          >
+            <span id="eqCollapseIcon" aria-hidden="true">⌄</span>
+          </button>
         </div>
       </div>
 
-      <div class="eq-toolbar">
-        <div class="eq-presets" aria-label="Preajustes del ecualizador">
-          <span class="eq-toolbar__label">Preajuste:</span>
-          <button class="eq-preset is-active" type="button" data-eq-preset="Flat">Flat</button>
-          <button class="eq-preset" type="button" data-eq-preset="Bass">Bass</button>
-          <button class="eq-preset" type="button" data-eq-preset="Vocal">Vocal</button>
-          <button class="eq-preset" type="button" data-eq-preset="Pop">Pop</button>
-          <button class="eq-preset" type="button" data-eq-preset="Rock">Rock</button>
-          <button class="eq-preset" type="button" data-eq-preset="Manual">Manual</button>
+      <div id="equalizerContent" class="equalizer-panel__content">
+        <div class="equalizer-panel__content-inner">
+          <div class="eq-toolbar">
+            <div class="eq-presets" aria-label="Preajustes del ecualizador">
+              <span class="eq-toolbar__label">Preajuste:</span>
+              <button class="eq-preset is-active" type="button" data-eq-preset="Flat">Flat</button>
+              <button class="eq-preset" type="button" data-eq-preset="Bass">Bass</button>
+              <button class="eq-preset" type="button" data-eq-preset="Vocal">Vocal</button>
+              <button class="eq-preset" type="button" data-eq-preset="Pop">Pop</button>
+              <button class="eq-preset" type="button" data-eq-preset="Rock">Rock</button>
+              <button class="eq-preset" type="button" data-eq-preset="Manual">Manual</button>
+            </div>
+
+            <label class="eq-master" for="eqMasterGain">
+              <span class="eq-toolbar__label">Ganancia general:</span>
+              <select id="eqMasterGain" class="eq-master-gain">
+                <option value="-6">-6 dB</option>
+                <option value="-3">-3 dB</option>
+                <option value="0" selected>0 dB</option>
+                <option value="3">+3 dB</option>
+                <option value="6">+6 dB</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="eq-bands-wrap" aria-label="Bandas de frecuencia">
+            <div class="eq-bands">
+              <label class="eq-band" for="eqBand32">
+                <span class="eq-band__slider-wrap"><input id="eqBand32" class="eq-band__slider" data-eq-band="0" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand32Value" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">32</span>
+              </label>
+              <label class="eq-band" for="eqBand64">
+                <span class="eq-band__slider-wrap"><input id="eqBand64" class="eq-band__slider" data-eq-band="1" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand64Value" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">64</span>
+              </label>
+              <label class="eq-band" for="eqBand125">
+                <span class="eq-band__slider-wrap"><input id="eqBand125" class="eq-band__slider" data-eq-band="2" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand125Value" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">125</span>
+              </label>
+              <label class="eq-band" for="eqBand250">
+                <span class="eq-band__slider-wrap"><input id="eqBand250" class="eq-band__slider" data-eq-band="3" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand250Value" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">250</span>
+              </label>
+              <label class="eq-band" for="eqBand500">
+                <span class="eq-band__slider-wrap"><input id="eqBand500" class="eq-band__slider" data-eq-band="4" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand500Value" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">500</span>
+              </label>
+              <label class="eq-band" for="eqBand1k">
+                <span class="eq-band__slider-wrap"><input id="eqBand1k" class="eq-band__slider" data-eq-band="5" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand1kValue" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">1K</span>
+              </label>
+              <label class="eq-band" for="eqBand2k">
+                <span class="eq-band__slider-wrap"><input id="eqBand2k" class="eq-band__slider" data-eq-band="6" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand2kValue" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">2K</span>
+              </label>
+              <label class="eq-band" for="eqBand4k">
+                <span class="eq-band__slider-wrap"><input id="eqBand4k" class="eq-band__slider" data-eq-band="7" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand4kValue" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">4K</span>
+              </label>
+              <label class="eq-band" for="eqBand8k">
+                <span class="eq-band__slider-wrap"><input id="eqBand8k" class="eq-band__slider" data-eq-band="8" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand8kValue" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">8K</span>
+              </label>
+              <label class="eq-band" for="eqBand16k">
+                <span class="eq-band__slider-wrap"><input id="eqBand16k" class="eq-band__slider" data-eq-band="9" type="range" min="-12" max="12" step="1" value="0"></span>
+                <output id="eqBand16kValue" class="eq-band__value">0 dB</output>
+                <span class="eq-band__frequency">16K</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="eq-footer">
+            <button id="eqReset" class="eq-reset" type="button">↻ Restablecer</button>
+            <p id="eqMessage" class="eq-message" aria-live="polite">Ecualizador listo para activar.</p>
+          </div>
         </div>
-
-        <label class="eq-master" for="eqMasterGain">
-          <span class="eq-toolbar__label">Ganancia general:</span>
-          <select id="eqMasterGain" class="eq-master-gain">
-            <option value="-6">-6 dB</option>
-            <option value="-3">-3 dB</option>
-            <option value="0" selected>0 dB</option>
-            <option value="3">+3 dB</option>
-            <option value="6">+6 dB</option>
-          </select>
-        </label>
-      </div>
-
-      <div class="eq-bands-wrap" aria-label="Bandas de frecuencia">
-        <div class="eq-bands">
-          <label class="eq-band" for="eqBand32">
-            <span class="eq-band__slider-wrap"><input id="eqBand32" class="eq-band__slider" data-eq-band="0" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand32Value" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">32</span>
-          </label>
-          <label class="eq-band" for="eqBand64">
-            <span class="eq-band__slider-wrap"><input id="eqBand64" class="eq-band__slider" data-eq-band="1" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand64Value" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">64</span>
-          </label>
-          <label class="eq-band" for="eqBand125">
-            <span class="eq-band__slider-wrap"><input id="eqBand125" class="eq-band__slider" data-eq-band="2" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand125Value" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">125</span>
-          </label>
-          <label class="eq-band" for="eqBand250">
-            <span class="eq-band__slider-wrap"><input id="eqBand250" class="eq-band__slider" data-eq-band="3" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand250Value" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">250</span>
-          </label>
-          <label class="eq-band" for="eqBand500">
-            <span class="eq-band__slider-wrap"><input id="eqBand500" class="eq-band__slider" data-eq-band="4" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand500Value" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">500</span>
-          </label>
-          <label class="eq-band" for="eqBand1k">
-            <span class="eq-band__slider-wrap"><input id="eqBand1k" class="eq-band__slider" data-eq-band="5" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand1kValue" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">1K</span>
-          </label>
-          <label class="eq-band" for="eqBand2k">
-            <span class="eq-band__slider-wrap"><input id="eqBand2k" class="eq-band__slider" data-eq-band="6" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand2kValue" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">2K</span>
-          </label>
-          <label class="eq-band" for="eqBand4k">
-            <span class="eq-band__slider-wrap"><input id="eqBand4k" class="eq-band__slider" data-eq-band="7" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand4kValue" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">4K</span>
-          </label>
-          <label class="eq-band" for="eqBand8k">
-            <span class="eq-band__slider-wrap"><input id="eqBand8k" class="eq-band__slider" data-eq-band="8" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand8kValue" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">8K</span>
-          </label>
-          <label class="eq-band" for="eqBand16k">
-            <span class="eq-band__slider-wrap"><input id="eqBand16k" class="eq-band__slider" data-eq-band="9" type="range" min="-12" max="12" step="1" value="0"></span>
-            <output id="eqBand16kValue" class="eq-band__value">0 dB</output>
-            <span class="eq-band__frequency">16K</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="eq-footer">
-        <button id="eqReset" class="eq-reset" type="button">↻ Restablecer</button>
-        <p id="eqMessage" class="eq-message" aria-live="polite">Ecualizador listo para activar.</p>
       </div>
     </section>
   </main>
