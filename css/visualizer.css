@@ -29,10 +29,12 @@
 }
 
 /*
- * Las barras del espectro no se dibujan en pantalla.
- * Funcionan únicamente como ventanas de recorte sobre el texto.
+ * Las barras son aperturas invisibles de una mascara binaria.
+ * Blanco = deja ver una porcion solida del letrero.
+ * Negro = mantiene esa zona completamente oculta.
  */
 #spectrumWindows rect {
+  fill: #ffffff;
   pointer-events: none;
 }
 
