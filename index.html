@@ -32,49 +32,14 @@
             <stop offset="1" stop-color="#8c6cff"></stop>
           </linearGradient>
 
-          <filter id="brandStaticGlow" x="-20%" y="-60%" width="140%" height="220%">
-            <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
-            <feMerge>
-              <feMergeNode in="blur"></feMergeNode>
-              <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-          </filter>
-
-          <filter id="maskSoftBlur" x="-60%" y="-30%" width="220%" height="160%">
-            <feGaussianBlur stdDeviation="7"></feGaussianBlur>
-          </filter>
-
-          <mask id="brandLightMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1200" height="190">
-            <rect x="0" y="0" width="1200" height="190" fill="#000000"></rect>
-            <g id="lightMaskHalos" filter="url(#maskSoftBlur)"></g>
-            <g id="lightMaskCores"></g>
-          </mask>
+          <clipPath id="spectrumClip" clipPathUnits="userSpaceOnUse">
+            <g id="spectrumWindows"></g>
+          </clipPath>
         </defs>
 
-        <text
-          class="brand-static__base"
-          x="600"
-          y="118"
-          text-anchor="middle"
-          textLength="1040"
-          lengthAdjust="spacingAndGlyphs"
-          fill="url(#brandStaticGradient)"
-        >ALCATRAZ RADIO FM</text>
-
-        <g class="brand-static__illuminated" mask="url(#brandLightMask)">
+        <g class="brand-spectrum" clip-path="url(#spectrumClip)">
           <text
-            class="brand-static__illuminated-glow"
-            x="600"
-            y="118"
-            text-anchor="middle"
-            textLength="1040"
-            lengthAdjust="spacingAndGlyphs"
-            fill="url(#brandStaticGradient)"
-            filter="url(#brandStaticGlow)"
-          >ALCATRAZ RADIO FM</text>
-
-          <text
-            class="brand-static__illuminated-text"
+            class="brand-spectrum__text"
             x="600"
             y="118"
             text-anchor="middle"
