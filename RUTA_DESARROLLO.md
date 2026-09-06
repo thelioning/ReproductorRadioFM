@@ -5,7 +5,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 ## Estado actual
 
 - Rama estable objetivo: `main`
-- Rama de cierre actual: `feature/ecualizador-real`
+- Rama de trabajo actual: `feature/config-white-label`
 - Producto de referencia: Alcatraz Radio FM
 - Meta comercial: reproductor white-label reutilizable e integrable en WordPress
 
@@ -80,7 +80,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 - [ ] Probar barra inferior con ecualizador activo
 - [ ] Recargar página y verificar persistencia
 - [ ] Revisar errores de consola
-- [ ] Validar escritorio
+- [x] Validar escritorio
 - [ ] Validar tablet
 - [ ] Validar Android
 - [ ] Validar iPhone
@@ -97,18 +97,18 @@ Cuando todas las pruebas anteriores estén aprobadas, Fase 1 queda cerrada.
 
 Sacar del código todos los datos específicos de Alcatraz y convertirlos en configuración.
 
-- [ ] Crear `feature/config-white-label`
-- [ ] Crear `config/station-config.js`
-- [ ] Mover nombre de emisora a configuración
-- [ ] Mover eslogan/subtítulo a configuración
-- [ ] Mover URL del stream a configuración
-- [ ] Mover logo a configuración
-- [ ] Mover texto LIVE a configuración
-- [ ] Mover colores principales a configuración
-- [ ] Mover opciones del visualizador a configuración
-- [ ] Mover opciones del ecualizador a configuración
-- [ ] Mover opciones de barra inferior a configuración
-- [ ] Mover opciones de Media Session a configuración
+- [x] Crear `feature/config-white-label`
+- [x] Crear `config/station-config.js`
+- [x] Mover nombre de emisora a configuración
+- [x] Mover eslogan/subtítulo a configuración
+- [x] Mover URL del stream a configuración
+- [x] Mover logo a configuración
+- [x] Mover texto LIVE a configuración
+- [x] Mover colores principales a configuración
+- [x] Mover opciones del visualizador a configuración
+- [x] Mover opciones del ecualizador a configuración
+- [x] Mover opciones de barra inferior a configuración
+- [x] Mover opciones de Media Session a configuración
 - [ ] Eliminar textos y rutas de Alcatraz hardcodeados del núcleo
 - [ ] Probar una segunda emisora ficticia cambiando solo configuración y assets
 
@@ -120,15 +120,15 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 
 # Fase 3 — Reorganización de arquitectura
 
-- [ ] Crear estructura `config/`
+- [x] Crear estructura `config/`
 - [ ] Crear estructura `assets/branding/`
 - [ ] Separar `player-ui.js`
 - [ ] Separar `media-session.js`
 - [ ] Crear `app.js` como punto de inicialización
 - [ ] Reducir variables globales
 - [ ] Mantener una sola fuente de verdad para reproducción, mute y volumen
-- [ ] Confirmar que ningún módulo crea un segundo stream
-- [ ] Confirmar que el ecualizador usa el mismo audio
+- [x] Confirmar que ningún módulo crea un segundo stream
+- [x] Confirmar que el ecualizador usa el mismo audio
 
 ---
 
@@ -160,7 +160,7 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 - [x] Barra fija funcional
 - [x] Ocultar/restaurar
 - [x] Sincronía básica
-- [ ] Adaptarla a configuración white-label
+- [x] Adaptarla a configuración white-label
 - [ ] Validar en páginas reales
 
 ---
@@ -253,10 +253,11 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Completar las pruebas pendientes de Fase 1.
-2. Confirmar que `main` contiene todos los cambios aprobados.
-3. Crear `feature/config-white-label` desde `main`.
-4. Empezar la Fase 2 extrayendo nombre, stream, logo y colores a configuración.
+1. Probar la nueva configuración white-label sin cambiar la apariencia de Alcatraz.
+2. Eliminar los últimos nombres/rutas específicos de Alcatraz que permanezcan en el núcleo.
+3. Crear una segunda configuración ficticia para demostrar que el mismo motor sirve para otra emisora.
+4. Crear el modo `compact` pensado para widget/columna de WordPress.
+5. Validar `compact` y `full` antes de iniciar el plugin WordPress.
 
 ---
 
