@@ -40,9 +40,13 @@
             </feMerge>
           </filter>
 
+          <filter id="maskSoftBlur" x="-60%" y="-30%" width="220%" height="160%">
+            <feGaussianBlur stdDeviation="7"></feGaussianBlur>
+          </filter>
+
           <mask id="brandLightMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1200" height="190">
             <rect x="0" y="0" width="1200" height="190" fill="#000000"></rect>
-            <g id="lightMaskHalos"></g>
+            <g id="lightMaskHalos" filter="url(#maskSoftBlur)"></g>
             <g id="lightMaskCores"></g>
           </mask>
         </defs>
