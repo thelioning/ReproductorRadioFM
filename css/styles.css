@@ -43,14 +43,14 @@ body {
   min-height: 58px;
 }
 
-.player__header::before {
-  content: "";
+.player__logo {
   width: 68px;
   height: 48px;
   justify-self: start;
+  object-fit: contain;
+  padding: 4px;
   border-radius: 9px;
-  background:
-    #f8fbfd url("../assets/alcatraz-logo.png") center / contain no-repeat;
+  background: #f8fbfd;
   box-shadow:
     0 5px 14px rgba(0, 0, 0, 0.18),
     inset 0 0 0 1px rgba(255, 255, 255, 0.55);
@@ -326,9 +326,10 @@ body {
     min-height: 48px;
   }
 
-  .player__header::before {
+  .player__logo {
     width: 50px;
     height: 36px;
+    padding: 3px;
     border-radius: 7px;
   }
 
