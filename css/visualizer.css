@@ -18,9 +18,9 @@
   inset: 10% 7%;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 18% 50%, rgba(255, 90, 200, 0.12), transparent 32%),
-    radial-gradient(circle at 50% 50%, rgba(87, 230, 200, 0.08), transparent 34%),
-    radial-gradient(circle at 82% 50%, rgba(140, 108, 255, 0.12), transparent 32%);
+    radial-gradient(circle at 18% 50%, rgba(255, 90, 200, 0.035), transparent 32%),
+    radial-gradient(circle at 50% 50%, rgba(87, 230, 200, 0.025), transparent 34%),
+    radial-gradient(circle at 82% 50%, rgba(140, 108, 255, 0.035), transparent 32%);
   filter: blur(20px);
   pointer-events: none;
 }
@@ -33,30 +33,42 @@
   height: 100%;
 }
 
-.brand-static__glow,
-.brand-static__text {
+.brand-static__base,
+.brand-static__illuminated-glow,
+.brand-static__illuminated-text {
   font-family: "Arial Black", Arial, Helvetica, sans-serif;
   font-size: 108px;
   font-weight: 900;
   letter-spacing: 2px;
 }
 
-.brand-static__glow {
-  opacity: 0.24;
+.brand-static__base {
+  opacity: 0.045;
 }
 
-.brand-static__text {
-  opacity: 0.92;
+.brand-static__illuminated-glow {
+  opacity: 0.44;
 }
 
-#equalizerBars {
+.brand-static__illuminated-text {
+  opacity: 1;
+}
+
+#lightMaskHalos rect {
+  fill: #ffffff;
+}
+
+#lightMaskCores rect {
+  fill: #ffffff;
+}
+
+#lightBeams {
   pointer-events: none;
 }
 
-#equalizerBars rect {
-  fill: url(#brandStaticGradient);
-  opacity: 1;
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.18));
+#lightBeams rect {
+  fill: url(#beamLightGradient);
+  mix-blend-mode: screen;
 }
 
 .controls {
@@ -73,8 +85,9 @@
     margin: 12px 0 10px;
   }
 
-  .brand-static__glow,
-  .brand-static__text {
+  .brand-static__base,
+  .brand-static__illuminated-glow,
+  .brand-static__illuminated-text {
     font-size: 100px;
   }
 }
@@ -85,8 +98,9 @@
     margin: 10px 0 8px;
   }
 
-  .brand-static__glow,
-  .brand-static__text {
+  .brand-static__base,
+  .brand-static__illuminated-glow,
+  .brand-static__illuminated-text {
     font-size: 90px;
   }
 
