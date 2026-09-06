@@ -2,28 +2,30 @@
   const SVG_NS = "http://www.w3.org/2000/svg";
 
   const baseBarsGroup = document.getElementById("visualizerBaseBars");
-  const glowBarsGroup = document.getElementById("visualizerGlowBars");
   const barsGroup = document.getElementById("visualizerBars");
   const edgeBarsGroup = document.getElementById("visualizerEdgeBars");
 
-  if (!baseBarsGroup || !glowBarsGroup || !barsGroup || !edgeBarsGroup) {
+  if (!baseBarsGroup || !barsGroup || !edgeBarsGroup) {
     return;
   }
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const START_X = 64;
-  const END_X = 1136;
+  const START_X = 72;
+  const END_X = 1128;
   const CENTER_Y = 96;
-  const BASE_TOP = 22;
-  const BASE_HEIGHT = 136;
-  const BAR_WIDTH = 6;
-  const BAR_STEP = 9;
+  const BASE_TOP = 28;
+  const BASE_HEIGHT = 128;
+  const BAR_WIDTH = 8;
+  const BAR_STEP = 13;
+  const TARGET_FPS = 28;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS;
 
   const bars = [];
   const edgeBars = [];
+  let lastFrameTime = 0;
 
-  function createRect(group, x, y, width, height, radius = 3) {
+  function createRect(group, x, y, width, height, radius = 4) {
     const rect = document.createElementNS(SVG_NS, "rect");
     rect.setAttribute("x", x);
     rect.setAttribute("y", y);
@@ -48,89 +50,92 @@
     for (let x = START_X, index = 0; x <= END_X; x += BAR_STEP, index += 1) {
       createRect(baseBarsGroup, x, BASE_TOP, BAR_WIDTH, BASE_HEIGHT, BAR_WIDTH / 2);
 
-      const glow = createRect(glowBarsGroup, x, CENTER_Y - 40, BAR_WIDTH, 80, BAR_WIDTH / 2);
-      const main = createRect(barsGroup, x, CENTER_Y - 40, BAR_WIDTH, 80, BAR_WIDTH / 2);
+      const main = createRect(barsGroup, x, CENTER_Y - 38, BAR_WIDTH, 76, BAR_WIDTH / 2);
 
       bars.push({
         main,
-        glow,
         index,
         phase: Math.random() * Math.PI * 2,
-        speed: 0.78 + Math.random() * 0.55,
-        bias: 0.76 + Math.random() * 0.34
+        speed: 0.82 + Math.random() * 0.42,
+        bias: 0.82 + Math.random() * 0.22
       });
     }
   }
 
   function buildEdgeBars() {
-    const leftPositions = [18, 29, 40, 51];
-    const rightPositions = [1149, 1160, 1171, 1182];
+    const leftPositions = [23, 36, 49, 62];
+    const rightPositions = [1138, 1151, 1164, 1177];
 
     leftPositions.forEach((x, index) => {
-      const rect = createRect(edgeBarsGroup, x, CENTER_Y - 8, 5, 16, 2.5);
-      edgeBars.push({ rect, index, phase: index * 0.7 });
+      const rect = createRect(edgeBarsGroup, x, CENTER_Y - 7, 6, 14, 3);
+      edgeBars.push({ rect, index, phase: index * 0.65 });
     });
 
     rightPositions.forEach((x, index) => {
-      const rect = createRect(edgeBarsGroup, x, CENTER_Y - 8, 5, 16, 2.5);
-      edgeBars.push({ rect, index: index + 4, phase: index * 0.7 + 1.1 });
+      const rect = createRect(edgeBarsGroup, x, CENTER_Y - 7, 6, 14, 3);
+      edgeBars.push({ rect, index: index + 4, phase: index * 0.65 + 1.1 });
     });
 
-    createCircle(edgeBarsGroup, 8, CENTER_Y, 3.4);
-    createCircle(edgeBarsGroup, 1192, CENTER_Y, 3.4);
+    createCircle(edgeBarsGroup, 10, CENTER_Y, 3.2);
+    createCircle(edgeBarsGroup, 1190, CENTER_Y, 3.2);
   }
 
   function waveLevel(index, time, phase, speed) {
-    const first = Math.sin(time * 0.0042 * speed + index * 0.31 + phase);
-    const second = Math.sin(time * 0.0025 + index * 0.17 + phase * 0.5);
-    const third = Math.sin(time * 0.0061 + index * 0.075);
-
-    return (first * 0.48 + second * 0.34 + third * 0.18 + 1) / 2;
+    const first = Math.sin(time * 0.0038 * speed + index * 0.29 + phase);
+    const second = Math.sin(time * 0.0021 + index * 0.16 + phase * 0.45);
+    return (first * 0.62 + second * 0.38 + 1) / 2;
   }
 
-  function render(time) {
-    const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
-
+  function drawFrame(time, playing) {
     bars.forEach((bar) => {
       const level = waveLevel(bar.index, time, bar.phase, bar.speed);
 
       let height;
-
       if (prefersReducedMotion) {
-        height = playing ? 96 : 62;
+        height = playing ? 92 : 54;
       } else if (playing) {
-        height = 46 + level * 98 * bar.bias;
+        height = 54 + level * 82 * bar.bias;
       } else {
-        height = 30 + level * 34;
+        height = 44;
       }
 
-      height = Math.max(24, Math.min(148, height));
-
+      height = Math.max(30, Math.min(138, height));
       const y = CENTER_Y - height / 2;
 
-      bar.main.setAttribute("y", y.toFixed(2));
-      bar.main.setAttribute("height", height.toFixed(2));
-      bar.main.setAttribute("opacity", playing ? "1" : "0.58");
-
-      bar.glow.setAttribute("y", y.toFixed(2));
-      bar.glow.setAttribute("height", height.toFixed(2));
-      bar.glow.setAttribute("opacity", playing ? "0.48" : "0.20");
+      bar.main.setAttribute("y", y.toFixed(1));
+      bar.main.setAttribute("height", height.toFixed(1));
+      bar.main.setAttribute("opacity", playing ? "1" : "0.52");
     });
 
     edgeBars.forEach((bar) => {
       const level = waveLevel(bar.index, time, bar.phase, 0.9);
-      const height = playing ? 10 + level * 42 : 7 + level * 16;
+      const height = playing ? 12 + level * 34 : 11;
       const y = CENTER_Y - height / 2;
 
-      bar.rect.setAttribute("y", y.toFixed(2));
-      bar.rect.setAttribute("height", height.toFixed(2));
+      bar.rect.setAttribute("y", y.toFixed(1));
+      bar.rect.setAttribute("height", height.toFixed(1));
       bar.rect.setAttribute("opacity", playing ? "0.90" : "0.42");
     });
+  }
+
+  function render(time) {
+    if (document.hidden) {
+      requestAnimationFrame(render);
+      return;
+    }
+
+    const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
+
+    if (!lastFrameTime || time - lastFrameTime >= FRAME_INTERVAL) {
+      drawFrame(time, playing);
+      lastFrameTime = time;
+    }
 
     requestAnimationFrame(render);
   }
 
   buildLetterBars();
   buildEdgeBars();
+  drawFrame(0, false);
   requestAnimationFrame(render);
 })();
