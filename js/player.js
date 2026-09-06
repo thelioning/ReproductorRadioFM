@@ -13,13 +13,13 @@ function updateVolumeUI() {
 }
 
 function updatePlayUI() {
-  if (isRadioPlaying()) {
-    playButton.textContent = "⏸";
-    playButton.setAttribute("aria-label", "Pausar");
+  const playing = isRadioPlaying();
+
+  playButton.classList.toggle("is-playing", playing);
+  playButton.setAttribute("aria-label", playing ? "Pausar" : "Reproducir");
+
+  if (playing) {
     status.textContent = "Transmitiendo en vivo";
-  } else {
-    playButton.textContent = "▶";
-    playButton.setAttribute("aria-label", "Reproducir");
   }
 }
 
