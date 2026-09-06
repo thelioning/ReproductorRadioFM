@@ -1,61 +1,59 @@
 (() => {
   const SVG_NS = "http://www.w3.org/2000/svg";
-  const maskHaloGroup = document.getElementById("lightMaskHalos");
-  const maskCoreGroup = document.getElementById("lightMaskCores");
+  const spectrumGroup = document.getElementById("spectrumWindows");
+  const audioElement = document.getElementById("radio");
 
-  if (!maskHaloGroup || !maskCoreGroup) {
+  if (!spectrumGroup || !audioElement) {
     return;
   }
 
-  const START_X = 82;
-  const END_X = 1118;
-  const BAR_STEP = 18;
-  const CORE_WIDTH = 24;
-  const HALO_WIDTH = 66;
+  const START_X = 86;
+  const END_X = 1114;
+  const BAR_STEP = 17;
+  const BAR_WIDTH = 12;
   const CENTER_Y = 94;
-  const MIN_HEIGHT = 30;
-  const MAX_HEIGHT = 180;
+  const MIN_HEIGHT = 10;
+  const MAX_HEIGHT = 176;
   const FRAME_INTERVAL = 1000 / 30;
-  const WAVE_SPEED = 0.00038;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bars = [];
 
   let lastFrame = 0;
   let lastTimestamp = 0;
-  let animationTime = 0;
+  let fallbackPlaybackTime = 0;
 
-  function createRect(group, x, width, radius) {
-    const rect = document.createElementNS(SVG_NS, "rect");
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
 
-    rect.setAttribute("x", x);
-    rect.setAttribute("y", CENTER_Y - MIN_HEIGHT / 2);
-    rect.setAttribute("width", width);
-    rect.setAttribute("height", MIN_HEIGHT);
-    rect.setAttribute("rx", radius);
-    rect.setAttribute("ry", radius);
-    rect.setAttribute("opacity", "0");
+  function gaussian(distance, width) {
+    const ratio = distance / width;
+    return Math.exp(-(ratio * ratio));
+  }
 
-    group.appendChild(rect);
-    return rect;
+  function circularDistance(a, b) {
+    const direct = Math.abs(a - b);
+    return Math.min(direct, 1 - direct);
   }
 
   function createBar(x, index) {
-    const halo = createRect(
-      maskHaloGroup,
-      x - (HALO_WIDTH - CORE_WIDTH) / 2,
-      HALO_WIDTH,
-      HALO_WIDTH / 2
-    );
+    const rect = document.createElementNS(SVG_NS, "rect");
 
-    const core = createRect(
-      maskCoreGroup,
-      x,
-      CORE_WIDTH,
-      CORE_WIDTH / 2
-    );
+    rect.setAttribute("x", x);
+    rect.setAttribute("y", CENTER_Y);
+    rect.setAttribute("width", BAR_WIDTH);
+    rect.setAttribute("height", 0);
+    rect.setAttribute("rx", BAR_WIDTH / 2);
+    rect.setAttribute("ry", BAR_WIDTH / 2);
 
-    bars.push({ halo, core, index });
+    spectrumGroup.appendChild(rect);
+
+    bars.push({
+      rect,
+      index,
+      level: 0
+    });
   }
 
   function buildBars() {
@@ -67,117 +65,98 @@
     }
   }
 
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
-  function gaussian(distance, width) {
-    const ratio = distance / width;
-    return Math.exp(-(ratio * ratio));
-  }
-
-  function waveCenter(time, offset, direction = 1) {
-    const travel = ((time * WAVE_SPEED + offset) % 1 + 1) % 1;
-    return direction > 0 ? travel : 1 - travel;
-  }
-
-  function getSequenceLevel(position, time) {
-    const waveA = gaussian(position - waveCenter(time, 0.00, 1), 0.115);
-    const waveB = gaussian(position - waveCenter(time, 0.33, -1), 0.145) * 0.88;
-    const waveC = gaussian(position - waveCenter(time, 0.66, 1), 0.105) * 0.74;
-
-    const ripple = 0.5 + 0.5 * Math.sin(time * 0.0062 + position * 31);
-    const pulse = 0.78 + 0.22 * Math.sin(time * 0.002 + position * 8.5);
-
-    const level = Math.max(waveA, waveB, waveC) * (0.76 + ripple * 0.24) * pulse;
-    return clamp(level, 0, 1);
-  }
-
-  function setBarGeometry(rect, y, height, opacity) {
-    rect.setAttribute("y", y.toFixed(2));
-    rect.setAttribute("height", height.toFixed(2));
-    rect.setAttribute("opacity", opacity.toFixed(3));
-  }
-
-  function hideBars() {
-    const y = CENTER_Y - MIN_HEIGHT / 2;
-
+  function hideSpectrum() {
     bars.forEach((bar) => {
-      setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
-      setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
+      bar.level = 0;
+      bar.rect.setAttribute("y", CENTER_Y);
+      bar.rect.setAttribute("height", 0);
     });
   }
 
-  function getReducedMotionLevel(position) {
-    const fixedWaveA = gaussian(position - 0.28, 0.15);
-    const fixedWaveB = gaussian(position - 0.70, 0.13) * 0.78;
-    return Math.max(fixedWaveA, fixedWaveB);
-  }
+  function getPlaybackSeconds(timestamp) {
+    const mediaTime = Number(audioElement.currentTime);
 
-  function render(time) {
-    requestAnimationFrame(render);
+    if (Number.isFinite(mediaTime) && mediaTime > 0) {
+      return mediaTime;
+    }
 
     if (!lastTimestamp) {
-      lastTimestamp = time;
+      lastTimestamp = timestamp;
+      return fallbackPlaybackTime;
     }
+
+    const delta = Math.min(50, Math.max(0, timestamp - lastTimestamp));
+    const playbackRate = Number.isFinite(audioElement.playbackRate)
+      ? audioElement.playbackRate
+      : 1;
+
+    fallbackPlaybackTime += (delta / 1000) * playbackRate;
+    return fallbackPlaybackTime;
+  }
+
+  function getSpectrumLevel(position, index, playbackSeconds) {
+    const centerA = (playbackSeconds * 0.095) % 1;
+    const centerB = (1 - ((playbackSeconds * 0.071 + 0.29) % 1) + 1) % 1;
+    const centerC = (playbackSeconds * 0.126 + 0.58) % 1;
+
+    const packetA = gaussian(circularDistance(position, centerA), 0.115);
+    const packetB = gaussian(circularDistance(position, centerB), 0.145) * 0.88;
+    const packetC = gaussian(circularDistance(position, centerC), 0.095) * 0.76;
+    const travellingEnvelope = Math.max(packetA, packetB, packetC);
+
+    const detailA = 0.5 + 0.5 * Math.sin(index * 0.61 + playbackSeconds * 4.15);
+    const detailB = 0.5 + 0.5 * Math.sin(index * 0.27 - playbackSeconds * 2.65);
+    const detailC = 0.5 + 0.5 * Math.sin(index * 0.13 + playbackSeconds * 1.35);
+
+    const localTexture = detailA * 0.48 + detailB * 0.32 + detailC * 0.20;
+    const pulse = 0.80 + 0.20 * Math.sin(playbackSeconds * 2.05 + position * 8.2);
+
+    const mixed = 0.06 + (travellingEnvelope * 0.68 + localTexture * 0.32) * pulse;
+    return clamp(Math.pow(mixed, 1.35), 0, 1);
+  }
+
+  function getReducedMotionLevel(position) {
+    const packetA = gaussian(circularDistance(position, 0.27), 0.13);
+    const packetB = gaussian(circularDistance(position, 0.68), 0.15) * 0.82;
+    return clamp(0.08 + Math.max(packetA, packetB) * 0.92, 0, 1);
+  }
+
+  function render(timestamp) {
+    requestAnimationFrame(render);
 
     const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
 
     if (!playing) {
-      lastTimestamp = time;
-      hideBars();
+      lastTimestamp = timestamp;
+      hideSpectrum();
       return;
     }
 
-    if (document.hidden) {
-      lastTimestamp = time;
+    if (document.hidden || timestamp - lastFrame < FRAME_INTERVAL) {
       return;
     }
 
-    if (time - lastFrame < FRAME_INTERVAL) {
-      return;
-    }
-
-    const delta = Math.min(50, Math.max(0, time - lastTimestamp));
-    lastTimestamp = time;
-    lastFrame = time;
-
-    if (!prefersReducedMotion) {
-      animationTime += delta;
-    }
+    const playbackSeconds = getPlaybackSeconds(timestamp);
+    lastTimestamp = timestamp;
+    lastFrame = timestamp;
 
     bars.forEach((bar, index) => {
       const position = index / Math.max(1, bars.length - 1);
-      const rawLevel = prefersReducedMotion
+      const targetLevel = prefersReducedMotion
         ? getReducedMotionLevel(position)
-        : getSequenceLevel(position, animationTime);
+        : getSpectrumLevel(position, index, playbackSeconds);
 
-      const level = rawLevel < 0.04 ? 0 : Math.pow(rawLevel, 1.2);
+      bar.level += (targetLevel - bar.level) * 0.24;
 
-      if (level === 0) {
-        const y = CENTER_Y - MIN_HEIGHT / 2;
-        setBarGeometry(bar.halo, y, MIN_HEIGHT, 0);
-        setBarGeometry(bar.core, y, MIN_HEIGHT, 0);
-        return;
-      }
-
-      const height = MIN_HEIGHT + level * (MAX_HEIGHT - MIN_HEIGHT);
+      const height = MIN_HEIGHT + bar.level * (MAX_HEIGHT - MIN_HEIGHT);
       const y = CENTER_Y - height / 2;
 
-      /*
-       * Los rectángulos ya no se dibujan sobre el letrero.
-       * Solo controlan la máscara: el núcleo revela letras sólidas y
-       * el halo suaviza la transición hacia la oscuridad.
-       */
-      const coreOpacity = clamp(0.62 + level * 0.38, 0, 1);
-      const haloOpacity = clamp(0.12 + level * 0.42, 0, 0.54);
-
-      setBarGeometry(bar.halo, y, height, haloOpacity);
-      setBarGeometry(bar.core, y, height, coreOpacity);
+      bar.rect.setAttribute("y", y.toFixed(2));
+      bar.rect.setAttribute("height", height.toFixed(2));
     });
   }
 
   buildBars();
-  hideBars();
+  hideSpectrum();
   requestAnimationFrame(render);
 })();
