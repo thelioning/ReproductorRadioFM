@@ -83,7 +83,7 @@ body {
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.28),
     0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-  transition: transform 0.16s ease, filter 0.16s ease, opacity 0.16s ease;
+  transition: transform 0.16s ease, filter 0.16s ease;
 }
 
 .play-button {
@@ -95,6 +95,8 @@ body {
   width: 58px;
   height: 58px;
   flex: 0 0 auto;
+  display: grid;
+  place-items: center;
 }
 
 .play-button::before,
@@ -175,75 +177,46 @@ body {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
-.volume-button__speaker,
-.volume-button__waves {
-  position: absolute;
+.volume-icon {
+  position: relative;
   z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  overflow: visible;
 }
 
-.volume-button__speaker {
-  left: 14px;
-  width: 10px;
-  height: 12px;
-  border-radius: 2px 0 0 2px;
-  background: #fff;
+.volume-icon__speaker {
+  fill: #fff;
 }
 
-.volume-button__speaker::after {
-  content: "";
-  position: absolute;
-  left: 8px;
-  top: -4px;
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 12px solid #fff;
+.volume-icon__wave,
+.volume-icon__mute {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.volume-button__waves {
-  left: 32px;
-  width: 8px;
-  height: 18px;
-  border: 2px solid #fff;
-  border-left: 0;
-  border-radius: 0 12px 12px 0;
-  opacity: 0.95;
+.volume-icon__wave {
+  opacity: 1;
+  transition: opacity 0.15s ease;
 }
 
-.volume-button__waves::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 3px;
-  width: 7px;
-  height: 10px;
-  border: 2px solid #fff;
-  border-left: 0;
-  border-radius: 0 9px 9px 0;
+.volume-icon__mute {
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
-.volume-button.is-muted .volume-button__waves {
-  display: none;
+.volume-button.is-muted .volume-icon__wave {
+  opacity: 0;
 }
 
-.volume-button.is-muted::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  left: 30px;
-  top: 17px;
-  width: 3px;
-  height: 21px;
-  border-radius: 2px;
-  background: #fff;
-  transform: rotate(45deg);
-  transform-origin: center;
+.volume-button.is-muted .volume-icon__mute {
+  opacity: 1;
 }
 
 .volume-control {
@@ -344,5 +317,10 @@ body {
   .volume-button {
     width: 54px;
     height: 54px;
+  }
+
+  .volume-icon {
+    width: 31px;
+    height: 31px;
   }
 }
