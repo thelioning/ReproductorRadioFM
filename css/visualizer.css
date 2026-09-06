@@ -10,25 +10,12 @@
   overflow: hidden;
   border-radius: 22px;
   background:
-    radial-gradient(circle at 18% 50%, rgba(255, 138, 76, 0.08), transparent 32%),
-    radial-gradient(circle at 82% 50%, rgba(188, 116, 238, 0.10), transparent 34%),
-    linear-gradient(180deg, rgba(9, 16, 22, 0.22), rgba(7, 12, 18, 0.08));
+    radial-gradient(circle at 18% 50%, rgba(255, 138, 76, 0.06), transparent 32%),
+    radial-gradient(circle at 82% 50%, rgba(188, 116, 238, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(9, 16, 22, 0.18), rgba(7, 12, 18, 0.06));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    inset 0 -18px 40px rgba(0, 0, 0, 0.10);
-}
-
-.brand-visualizer::after {
-  content: "";
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  bottom: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: linear-gradient(90deg, rgba(255, 138, 76, 0.20), rgba(255, 127, 119, 0.18), rgba(188, 116, 238, 0.22));
-  filter: blur(18px);
-  pointer-events: none;
+    inset 0 -12px 28px rgba(0, 0, 0, 0.08);
 }
 
 #brandVisualizer {
@@ -41,12 +28,11 @@
 
 #visualizerBaseBars rect {
   fill: url(#visualizerGradient);
-  opacity: 0.30;
+  opacity: 0.22;
 }
 
-#visualizerGlowBars rect {
-  fill: url(#visualizerGradient);
-  opacity: 0.42;
+#visualizerGlowBars {
+  display: none;
 }
 
 #visualizerBars rect {
