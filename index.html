@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alcatraz Radio FM</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/visualizer.css">
 </head>
 <body>
   <main class="player" aria-label="Reproductor de Alcatraz Radio FM">
@@ -17,35 +18,6 @@
     </header>
 
     <audio id="radio" src="https://a8.my-control-panel.com:9360/radio.mp3" preload="none"></audio>
-
-    <section class="visualizer-panel" aria-label="Visualizador de la emisora">
-  <svg id="brandVisualizer" viewBox="0 0 1200 210" preserveAspectRatio="xMidYMid meet">
-    <defs>
-      <clipPath id="brandTextClip">
-        <text
-          id="brandTextMask"
-          x="600"
-          y="122"
-          text-anchor="middle"
-        >
-          ALCATRAZ RADIO FM
-        </text>
-      </clipPath>
-
-      <filter id="glowEffect" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="4" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-
-    <g id="edgeDots"></g>
-    <g id="barsGlow" clip-path="url(#brandTextClip)" filter="url(#glowEffect)"></g>
-    <g id="barsMain" clip-path="url(#brandTextClip)"></g>
-  </svg>
-</section>
 
     <section class="controls" aria-label="Controles de reproducción">
       <button id="playButton" class="play-button" type="button" aria-label="Reproducir">
@@ -74,6 +46,7 @@
     </section>
 
     <p id="status" class="status" aria-live="polite">Radio detenida</p>
+    <p id="audioDebug" class="audio-debug" aria-live="polite"></p>
   </main>
 
   <script src="js/audio-engine.js"></script>
