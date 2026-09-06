@@ -1,0 +1,145 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #101820;
+}
+
+.player {
+  width: min(100%, 520px);
+  padding: 30px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #263747, #18232d);
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.player__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.player__header h1 {
+  margin: 0;
+  font-size: 1.65rem;
+}
+
+.player__header p {
+  margin: 7px 0 0;
+  color: #bdc9d4;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 13px;
+  border-radius: 7px;
+  background: #ff0022;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.controls {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.control-button {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: #e9eef2;
+  color: #17222c;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.control-button:hover {
+  transform: translateY(-1px);
+}
+
+.control-button:active {
+  transform: translateY(0);
+}
+
+.control-button--primary {
+  width: 58px;
+  height: 58px;
+  background: #fff;
+  font-size: 1.3rem;
+}
+
+.volume-control {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "label value"
+    "range range";
+  gap: 6px 10px;
+}
+
+.volume-control label {
+  grid-area: label;
+  color: #d6dfe7;
+  font-size: 0.82rem;
+}
+
+#volumeValue {
+  grid-area: value;
+  color: #d6dfe7;
+  font-size: 0.82rem;
+}
+
+#volumeControl {
+  grid-area: range;
+  width: 100%;
+  cursor: pointer;
+  accent-color: #5ba5ff;
+}
+
+.status {
+  margin: 24px 0 0;
+  min-height: 1.2em;
+  text-align: center;
+  color: #c7d2dc;
+}
+
+@media (max-width: 520px) {
+  body {
+    padding: 14px;
+  }
+
+  .player {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  .controls {
+    grid-template-columns: auto auto;
+  }
+
+  .volume-control {
+    grid-column: 1 / -1;
+  }
+}
