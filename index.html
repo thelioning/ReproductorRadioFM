@@ -31,6 +31,7 @@
             <stop offset="0.81" stop-color="#58b8ff"></stop>
             <stop offset="1" stop-color="#8c6cff"></stop>
           </linearGradient>
+
           <filter id="brandStaticGlow" x="-20%" y="-60%" width="140%" height="220%">
             <feGaussianBlur stdDeviation="5" result="blur"></feGaussianBlur>
             <feMerge>
@@ -38,6 +39,20 @@
               <feMergeNode in="SourceGraphic"></feMergeNode>
             </feMerge>
           </filter>
+
+          <clipPath id="equalizerTextClip">
+            <text
+              x="600"
+              y="118"
+              text-anchor="middle"
+              textLength="1040"
+              lengthAdjust="spacingAndGlyphs"
+              font-family="Arial Black, Arial, Helvetica, sans-serif"
+              font-size="108"
+              font-weight="900"
+              letter-spacing="2"
+            >ALCATRAZ RADIO FM</text>
+          </clipPath>
         </defs>
 
         <text
@@ -60,6 +75,8 @@
           lengthAdjust="spacingAndGlyphs"
           fill="url(#brandStaticGradient)"
         >ALCATRAZ RADIO FM</text>
+
+        <g id="equalizerBars" clip-path="url(#equalizerTextClip)"></g>
       </svg>
     </section>
 
@@ -94,5 +111,6 @@
 
   <script src="js/audio-engine.js"></script>
   <script src="js/player.js"></script>
+  <script src="js/visualizer.js"></script>
 </body>
 </html>
