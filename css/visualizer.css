@@ -49,6 +49,19 @@
   margin-top: 10px;
 }
 
+.audio-debug {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: rgba(8, 14, 20, 0.38);
+  color: #9fb4c7;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-align: center;
+  word-break: break-word;
+}
+
 @media (max-width: 700px) {
   .player {
     width: min(100%, 620px);
@@ -69,5 +82,9 @@
 
   .controls {
     margin-top: 4px;
+  }
+
+  .audio-debug {
+    font-size: 0.66rem;
   }
 }
