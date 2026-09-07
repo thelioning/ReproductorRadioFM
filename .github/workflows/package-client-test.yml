@@ -43,6 +43,7 @@ jobs:
           cp templates/player.php "$PACKAGE_DIR/templates/"
           cp DOCUMENTACION_CLIENTE.md "$PACKAGE_DIR/"
           cp INSTALACION_CLIENTE.html "$PACKAGE_DIR/"
+          cp RETROALIMENTACION_CLIENTE.txt "$PACKAGE_DIR/"
           cp readme.txt "$PACKAGE_DIR/"
 
       - name: Crear ZIP instalable de WordPress
