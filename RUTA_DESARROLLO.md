@@ -167,11 +167,13 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Mantener el mismo motor `RadioApp.audio`
 - [ ] Mantener sincronía con barra inferior y Media Session — validación final en modo compacto
 - [x] Crear banco de prueba `dev/widget-preview.html`
-- [ ] Validar ancho 470 px
-- [ ] Validar ancho 400 px
-- [ ] Validar ancho 360 px
-- [ ] Validar ancho 320 px
-- [ ] Validar ecualizador plegado y desplegado en esos anchos
+- [x] Validar ancho 470 px
+- [x] Validar ancho 400 px
+- [x] Validar ancho 360 px
+- [x] Validar ancho 320 px
+- [x] Validar ecualizador plegado y desplegado en esos anchos
+
+**Resultado visual:** el widget mantiene logo, nombre, LIVE, visualizador, controles y ecualizador dentro del ancho disponible en 470, 400, 360 y 320 px. En anchos estrechos, las bandas del ecualizador permanecen accesibles mediante desplazamiento horizontal interno sin desbordar el widget.
 
 ## Reproductor completo
 
@@ -281,13 +283,11 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Abrir `dev/widget-preview.html`.
-2. Validar el mismo widget a 470, 400, 360 y 320 px.
-3. En cada ancho probar Play/Pause, nombre sólido en pausa, visualizador animado, mute y volumen.
-4. Desplegar el ecualizador y verificar que sus 10 bandas siguen accesibles mediante desplazamiento horizontal cuando sea necesario.
-5. Comprobar barra inferior y Media Session en modo compacto.
-6. Revalidar `presentation.mode = "full"` antes de integrar la Fase 4 a `main`.
-7. Tras aprobación, iniciar el plugin WordPress MVP.
+1. Validar sincronía de Play/Pause y mute entre widget compacto y barra inferior.
+2. Validar Media Session en modo compacto.
+3. Revalidar `presentation.mode = "full"`.
+4. Si todo se mantiene estable, integrar Fase 4 a `main`.
+5. Crear `feature/wordpress-plugin` e iniciar el plugin WordPress MVP.
 
 ---
 
