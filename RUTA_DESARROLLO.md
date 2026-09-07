@@ -110,19 +110,21 @@ Sacar del código todos los datos específicos de Alcatraz y convertirlos en con
 - [x] Mover opciones de barra inferior a configuración
 - [x] Mover opciones de Media Session a configuración
 - [x] Validar que Alcatraz conserva el mismo sonido y apariencia después de la refactorización
-- [ ] Eliminar textos y rutas de Alcatraz hardcodeados del núcleo
-- [ ] Probar una segunda emisora ficticia cambiando solo configuración y assets
+- [x] Eliminar textos y rutas de Alcatraz hardcodeados del núcleo
+- [x] Probar una segunda emisora ficticia cambiando solo configuración y assets
 
 ### Criterio de cierre
 
 Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los módulos funcionales.
+
+**Estado: Fase 2 completada.** La prueba con Radio Horizonte confirmó cambio de nombre, logo, colores y textos manteniendo el mismo núcleo y reproducción.
 
 ---
 
 # Fase 3 — Reorganización de arquitectura
 
 - [x] Crear estructura `config/`
-- [ ] Crear estructura `assets/branding/`
+- [x] Crear estructura `assets/branding/`
 - [ ] Separar `player-ui.js`
 - [ ] Separar `media-session.js`
 - [ ] Crear `app.js` como punto de inicialización
@@ -161,7 +163,7 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 - [x] Barra fija funcional
 - [x] Ocultar/restaurar
 - [x] Sincronía básica
-- [ ] Adaptarla a configuración white-label
+- [x] Adaptarla a configuración white-label
 - [ ] Validar en páginas reales
 
 ---
@@ -254,11 +256,11 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Crear una segunda configuración de emisora para demostrar el white-label.
-2. Verificar que el cambio de nombre, logo, colores y stream no requiere modificar el núcleo.
-3. Eliminar referencias restantes de Alcatraz dentro de los módulos funcionales.
-4. Cerrar Fase 2.
-5. Iniciar el modo `compact` para convertir el reproductor en widget embebible.
+1. Cerrar la rama `feature/config-white-label` con Alcatraz restaurado como configuración activa.
+2. Iniciar Fase 3 separando responsabilidades de interfaz y Media Session.
+3. Crear `app.js` como punto de inicialización.
+4. Reducir dependencias globales sin modificar el motor de audio aprobado.
+5. Después crear el modo `compact`, base del widget embebible para WordPress.
 
 ---
 
