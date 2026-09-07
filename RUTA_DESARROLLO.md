@@ -5,7 +5,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 ## Estado actual
 
 - Rama estable objetivo: `main`
-- Rama de trabajo actual: `feature/reorganizacion-arquitectura`
+- Rama de trabajo actual: `feature/widget-compact`
 - Producto de referencia: Alcatraz Radio FM
 - Meta comercial: reproductor white-label reutilizable e integrable en WordPress
 
@@ -79,7 +79,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 - [ ] Probar ecualizador plegado mientras sigue activo
 - [ ] Probar barra inferior con ecualizador activo
 - [ ] Recargar página y verificar persistencia
-- [ ] Revisar errores de consola
+- [x] Revisar errores de consola en escritorio
 - [x] Validar escritorio
 - [ ] Validar tablet
 - [ ] Validar Android
@@ -135,12 +135,16 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 - [x] Migrar visualizador al motor de audio compartido
 - [x] Migrar ecualizador al motor de audio compartido
 - [x] Retirar `player.js` heredado
+- [x] Validar manualmente Play/Pause, mute, volumen, visualizador, ecualizador y barra inferior
+- [x] Validar Media Session
+- [x] Revisar consola sin errores
+- [x] Integrar Fase 3 a `main`
 
 ### Criterio de cierre
 
 La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben consumir el mismo motor `RadioApp.audio`, sin crear nuevas fuentes de audio.
 
-**Estado técnico: implementación completada. Pendiente validación manual de reproducción y controles antes de integrar a `main`.**
+**Estado: Fase 3 completada e integrada a `main`.**
 
 ---
 
@@ -148,6 +152,7 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 
 ## Widget compacto
 
+- [x] Crear rama `feature/widget-compact`
 - [ ] Crear modo `compact`
 - [ ] Logo
 - [ ] Nombre
@@ -157,15 +162,18 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [ ] Volumen opcional
 - [ ] Ecualizador cerrado por defecto
 - [ ] Responsive para columnas y sidebars
+- [ ] Mantener el mismo motor `RadioApp.audio`
+- [ ] Mantener sincronía con barra inferior y Media Session
+- [ ] Probar ancho aproximado de widget WordPress real
 
 ## Reproductor completo
 
-- [ ] Crear modo `full`
-- [ ] Visualizador completo
-- [ ] Volumen
-- [ ] Ecualizador
-- [ ] Presets
-- [ ] Estado de transmisión
+- [ ] Formalizar modo `full`
+- [x] Visualizador completo
+- [x] Volumen
+- [x] Ecualizador
+- [x] Presets
+- [x] Estado de transmisión
 
 ## Barra inferior
 
@@ -265,12 +273,12 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Validar manualmente `feature/reorganizacion-arquitectura`.
-2. Probar Play/Pause, mute, volumen, visualizador, ecualizador y barra inferior.
-3. Confirmar que Media Session sigue respondiendo.
-4. Revisar consola sin errores.
-5. Si la prueba es correcta, integrar Fase 3 a `main`.
-6. Crear la rama de Fase 4 para construir el modo `compact`, base del widget WordPress.
+1. Construir el modo `compact` sin duplicar el motor de audio.
+2. Mantener `full` como presentación actual.
+3. Hacer que el modo se seleccione desde configuración.
+4. Ajustar el compacto a un ancho típico de columna/widget WordPress.
+5. Probar Play/Pause, mute, volumen opcional, ecualizador plegado y sincronía con la barra inferior.
+6. Tras aprobar el modo compacto, integrar Fase 4 a `main` y comenzar el plugin WordPress MVP.
 
 ---
 
