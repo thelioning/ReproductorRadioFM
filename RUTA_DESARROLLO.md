@@ -183,7 +183,9 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Ecualizador
 - [x] Presets
 - [x] Estado de transmisión
-- [ ] Revalidar modo `full` después de cerrar la Fase 4
+- [x] Revalidar modo `full` después de cerrar los ajustes del widget compacto
+
+**Resultado visual:** el modo `full` fue revalidado directamente en `index.html` a ancho de escritorio. Conserva la composición completa, visualizador, volumen, ecualizador de 10 bandas y barra inferior sin desbordamiento del reproductor.
 
 ## Barra inferior
 
@@ -283,9 +285,9 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Validar sincronía de Play/Pause y mute entre widget compacto y barra inferior.
-2. Validar Media Session en modo compacto.
-3. Revalidar `presentation.mode = "full"`.
+1. Volver la configuración local a `presentation.mode = "compact"`.
+2. Validar sincronía de Play/Pause y mute entre widget compacto y barra inferior.
+3. Validar Media Session en modo compacto.
 4. Si todo se mantiene estable, integrar Fase 4 a `main`.
 5. Crear `feature/wordpress-plugin` e iniciar el plugin WordPress MVP.
 
