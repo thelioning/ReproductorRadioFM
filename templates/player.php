@@ -3,7 +3,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="arf-player-host">
+<div
+  class="arf-player-host"
+  data-radio-config="<?php echo esc_attr(wp_json_encode($config)); ?>"
+>
   <main class="player" aria-label="<?php echo esc_attr('Reproductor de ' . $config['name']); ?>">
     <header class="player__header">
       <img class="player__logo" data-station-logo src="<?php echo esc_url($config['logo']); ?>" alt="<?php echo esc_attr('Logo de ' . $config['name']); ?>">
