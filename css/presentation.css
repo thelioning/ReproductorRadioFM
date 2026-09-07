@@ -1,9 +1,36 @@
 .player[data-player-mode="compact"] {
   width: min(100%, 470px);
+  max-width: 470px;
+  min-width: 0;
   padding: 22px;
   border-radius: 24px;
   container-type: inline-size;
   container-name: radio-player;
+}
+
+/*
+ * En modo compacto el body no debe crecer por el ancho intrínseco del
+ * ecualizador. La columna central puede reducirse hasta el ancho real del
+ * viewport o del iframe de WordPress.
+ */
+body[data-player-mode="compact"] {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  overflow-x: hidden;
+}
+
+.player[data-player-mode="compact"] .player__header,
+.player[data-player-mode="compact"] .controls,
+.player[data-player-mode="compact"] .volume-group,
+.player[data-player-mode="compact"] .volume-control,
+.player[data-player-mode="compact"] .equalizer-panel,
+.player[data-player-mode="compact"] .equalizer-panel__header,
+.player[data-player-mode="compact"] .equalizer-panel__content,
+.player[data-player-mode="compact"] .equalizer-panel__content-inner,
+.player[data-player-mode="compact"] .eq-toolbar,
+.player[data-player-mode="compact"] .eq-bands-wrap {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .player[data-player-mode="compact"] .player__header {
@@ -153,6 +180,8 @@
 }
 
 .player[data-player-mode="compact"] .eq-bands-wrap {
+  width: 100%;
+  overflow-x: auto;
   overscroll-behavior-inline: contain;
   -webkit-overflow-scrolling: touch;
 }
@@ -349,6 +378,8 @@
 @media (max-width: 520px) {
   .player[data-player-mode="compact"] {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding: 18px;
     border-radius: 20px;
   }
