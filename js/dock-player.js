@@ -9,13 +9,50 @@
   const closeButton = document.getElementById("dockCloseButton");
   const dockPlayButton = document.getElementById("dockPlayButton");
   const dockMuteButton = document.getElementById("dockMuteButton");
+  const dockControls = dock?.querySelector(".radio-dock__controls");
 
-  if (!audio || !dock || !launcher || !closeButton || !dockPlayButton || !dockMuteButton) {
+  if (!audio || !dock || !launcher || !closeButton || !dockPlayButton || !dockMuteButton || !dockControls) {
     return;
   }
 
   const storageNamespace = config.storageNamespace || "radio-player";
   const STORAGE_KEY = `${storageNamespace}-dock-hidden`;
+
+  function createDockVolumeControl() {
+    const existingInput = document.getElementById("dockVolumeControl");
+    const existingValue = document.getElementById("dockVolumeValue");
+
+    if (existingInput && existingValue) {
+      return { input: existingInput, value: existingValue };
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "radio-dock__volume-control";
+
+    const input = document.createElement("input");
+    input.id = "dockVolumeControl";
+    input.className = "radio-dock__volume-slider";
+    input.type = "range";
+    input.min = "0";
+    input.max = "1";
+    input.step = "0.01";
+    input.value = String(audio.getVolume());
+    input.setAttribute("aria-label", "Volumen del reproductor inferior");
+
+    const value = document.createElement("span");
+    value.id = "dockVolumeValue";
+    value.className = "radio-dock__volume-value";
+    value.setAttribute("aria-hidden", "true");
+
+    wrapper.append(input, value);
+    dockControls.appendChild(wrapper);
+
+    return { input, value };
+  }
+
+  const dockVolume = createDockVolumeControl();
+  const dockVolumeInput = dockVolume.input;
+  const dockVolumeValue = dockVolume.value;
 
   function setDockHidden(hidden, persist = true) {
     dock.classList.toggle("is-hidden", hidden);
@@ -43,6 +80,13 @@
 
     dockMuteButton.classList.toggle("is-muted", muted);
     dockMuteButton.setAttribute("aria-label", muted ? "Activar sonido" : "Silenciar");
+  }
+
+  function syncVolumeUI() {
+    const volume = audio.getVolume();
+    dockVolumeInput.value = String(volume);
+    dockVolumeValue.textContent = `${Math.round(volume * 100)}%`;
+    dockVolumeInput.setAttribute("aria-valuetext", `${Math.round(volume * 100)}%`);
   }
 
   async function startPlayback() {
@@ -73,6 +117,14 @@
   dockMuteButton.addEventListener("click", () => {
     audio.toggleMute();
     syncMuteUI();
+    syncVolumeUI();
+    ui?.updateVolumeUI?.();
+  });
+
+  dockVolumeInput.addEventListener("input", (event) => {
+    audio.setVolume(event.target.value);
+    syncVolumeUI();
+    syncMuteUI();
     ui?.updateVolumeUI?.();
   });
 
@@ -82,7 +134,10 @@
   audio.element.addEventListener("playing", syncPlayUI);
   audio.element.addEventListener("pause", syncPlayUI);
   audio.element.addEventListener("ended", syncPlayUI);
-  audio.element.addEventListener("volumechange", syncMuteUI);
+  audio.element.addEventListener("volumechange", () => {
+    syncMuteUI();
+    syncVolumeUI();
+  });
 
   let savedHidden = false;
 
@@ -95,11 +150,13 @@
   app.dock = Object.freeze({
     setHidden: setDockHidden,
     syncPlayUI,
-    syncMuteUI
+    syncMuteUI,
+    syncVolumeUI
   });
   window.RadioApp = app;
 
   setDockHidden(savedHidden, false);
   syncPlayUI();
   syncMuteUI();
+  syncVolumeUI();
 })();
