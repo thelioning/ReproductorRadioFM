@@ -1,16 +1,17 @@
 (() => {
   const SVG_NS = "http://www.w3.org/2000/svg";
   const spectrumGroup = document.getElementById("spectrumWindows");
-  const audioElement = document.getElementById("radio");
+  const audio = window.RadioApp?.audio;
+  const audioElement = audio?.element;
 
-  if (!spectrumGroup || !audioElement) {
+  if (!spectrumGroup || !audioElement || !audio) {
     return;
   }
 
   /*
    * El espectro funciona como una plantilla invisible sobre el letrero.
    * Cada barra es una abertura independiente que revela únicamente la
-   * porción de ALCATRAZ RADIO FM situada detrás de ella.
+   * porción del nombre visual de la emisora situada detrás de ella.
    */
   const START_X = 72;
   const END_X = 1128;
@@ -20,8 +21,6 @@
   const MIN_HEIGHT = 6;
   const MAX_HEIGHT = 178;
   const FRAME_INTERVAL = 1000 / 30;
-
-  /* El video de referencia repite prácticamente el patrón cada ~9.8 s. */
   const LOOP_SECONDS = 9.86;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -112,19 +111,12 @@
 
   function getReferenceEnvelope(position, time) {
     const phase = (time % LOOP_SECONDS) / LOOP_SECONDS;
-
-    /*
-     * Dos grupos principales recorren el espectro en sentidos opuestos.
-     * Sus posiciones reproducen la secuencia observada en el segundo video:
-     * izquierda + centro/derecha -> centro -> derecha -> izquierda + derecha.
-     */
     const centerA = (0.10 + phase * 1.20) % 1;
     const centerB = (0.64 - phase + 1) % 1;
 
     const packetA = gaussian(circularDistance(position, centerA), 0.125);
     const packetB = gaussian(circularDistance(position, centerB), 0.115) * 0.82;
 
-    /* Tercer grupo suave para evitar una repetición demasiado mecánica. */
     const centerC = (0.34 + phase * 0.58) % 1;
     const packetC = gaussian(circularDistance(position, centerC), 0.075) * 0.34;
 
@@ -133,23 +125,10 @@
 
   function getSpectrumLevel(bar, position, time) {
     const envelope = getReferenceEnvelope(position, time);
-
-    /*
-     * Cada barra respira de manera individual. Así las columnas vecinas
-     * pertenecen al mismo grupo, pero no crecen ni decrecen como una sola pieza.
-     */
     const individualWave = 0.72 + 0.28 * Math.sin(time * bar.speed + bar.phase);
     const fineMotion = 0.86 + 0.14 * Math.sin(time * 5.2 + bar.index * 1.17);
-
-    /* Variación lenta de la energía general para imitar frases musicales. */
     const phrase = 0.88 + 0.12 * Math.sin((time / LOOP_SECONDS) * Math.PI * 4 - 0.7);
-
     const active = envelope * individualWave * fineMotion * phrase * bar.gain;
-
-    /*
-     * En zonas sin un grupo activo permanecen aperturas mínimas, como los
-     * pequeños puntos centrales del espectro de referencia.
-     */
     const idle = 0.015 + 0.020 * (0.5 + 0.5 * Math.sin(time * 2.4 + bar.phase));
 
     return clamp(Math.max(idle, active), 0, 1);
@@ -164,16 +143,9 @@
   function render(timestamp) {
     requestAnimationFrame(render);
 
-    const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
-    const muted = typeof isMuted === "function"
-      ? isMuted()
-      : audioElement.muted || audioElement.volume === 0;
+    const playing = audio.isPlaying();
+    const muted = audio.isMuted();
 
-    /*
-     * Pausa real: el espectro desaparece.
-     * Mute: se conserva exactamente el último fotograma visible y se congela
-     * el reloj de la animación, simulando que el espectro se detuvo con el audio.
-     */
     if (!playing) {
       lastTimestamp = timestamp;
       hideSpectrum();
@@ -199,7 +171,6 @@
         ? getReducedMotionLevel(position)
         : getSpectrumLevel(bar, position, animationSeconds);
 
-      /* Ataque algo más rápido y caída más lenta: movimiento más natural. */
       const response = targetLevel > bar.level ? 0.27 : 0.15;
       bar.level += (targetLevel - bar.level) * response;
 
