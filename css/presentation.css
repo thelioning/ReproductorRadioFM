@@ -1,0 +1,195 @@
+.player[data-player-mode="compact"] {
+  width: min(100%, 470px);
+  padding: 22px;
+  border-radius: 24px;
+}
+
+.player[data-player-mode="compact"] .player__header {
+  grid-template-columns: 62px minmax(0, 1fr) 62px;
+  gap: 12px;
+  min-height: 48px;
+}
+
+.player[data-player-mode="compact"] .player__logo {
+  width: 58px;
+  height: 42px;
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.player[data-player-mode="compact"] .player__header h1 {
+  font-size: 1.22rem;
+}
+
+.player[data-player-mode="compact"] .player__header p {
+  margin-top: 4px;
+  font-size: 0.76rem;
+}
+
+.player[data-player-mode="compact"] .live-badge {
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 0.66rem;
+}
+
+.player[data-player-mode="compact"] .controls {
+  margin-top: 22px;
+  gap: 14px;
+}
+
+.player[data-player-mode="compact"] .play-button {
+  width: 60px;
+  height: 60px;
+}
+
+.player[data-player-mode="compact"] .volume-button {
+  width: 48px;
+  height: 48px;
+}
+
+.player[data-player-mode="compact"] .volume-icon {
+  width: 29px;
+  height: 29px;
+}
+
+.player[data-player-mode="compact"] .volume-group {
+  gap: 12px;
+}
+
+.player[data-player-mode="compact"] .volume-control__header {
+  margin-bottom: 5px;
+}
+
+.player[data-player-mode="compact"] .volume-control label,
+.player[data-player-mode="compact"] #volumeValue {
+  font-size: 0.72rem;
+}
+
+.player[data-player-mode="compact"] #volumeControl::-webkit-slider-runnable-track {
+  height: 7px;
+}
+
+.player[data-player-mode="compact"] #volumeControl::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: -6px;
+}
+
+.player[data-player-mode="compact"] #volumeControl::-moz-range-track {
+  height: 7px;
+}
+
+.player[data-player-mode="compact"] #volumeControl::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+}
+
+.player[data-player-mode="compact"] .status {
+  margin-top: 14px;
+  font-size: 0.78rem;
+}
+
+.player[data-player-mode="compact"] .equalizer-panel {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 15px;
+}
+
+.player[data-player-mode="compact"] .equalizer-panel__header {
+  gap: 10px;
+}
+
+.player[data-player-mode="compact"] .equalizer-panel__icon {
+  width: 26px;
+  height: 26px;
+}
+
+.player[data-player-mode="compact"] .equalizer-panel h2 {
+  font-size: 0.88rem;
+}
+
+.player[data-player-mode="compact"] .equalizer-panel__subtitle {
+  display: none;
+}
+
+.player[data-player-mode="compact"] .eq-switch {
+  width: 46px;
+  height: 24px;
+}
+
+.player[data-player-mode="compact"] .eq-switch::after {
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+}
+
+.player[data-player-mode="compact"] .eq-switch.is-enabled::after {
+  transform: translateX(22px);
+}
+
+.player[data-player-mode="compact"] .eq-switch-wrap {
+  gap: 6px;
+  font-size: 0.68rem;
+}
+
+.player[data-player-mode="compact"] .eq-collapse {
+  width: 28px;
+  height: 28px;
+}
+
+.player[data-player-mode="compact"] .eq-toolbar {
+  grid-template-columns: 1fr;
+  margin-top: 2px;
+}
+
+.player[data-player-mode="compact"] .eq-master {
+  padding-left: 0;
+  padding-top: 7px;
+  border-left: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.player[data-player-mode="compact"] .eq-bands {
+  min-width: 560px;
+}
+
+@media (max-width: 520px) {
+  .player[data-player-mode="compact"] {
+    width: 100%;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .player[data-player-mode="compact"] .player__header {
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
+    gap: 8px;
+  }
+
+  .player[data-player-mode="compact"] .player__logo {
+    width: 48px;
+    height: 35px;
+  }
+
+  .player[data-player-mode="compact"] .player__header h1 {
+    font-size: 1.05rem;
+  }
+
+  .player[data-player-mode="compact"] .player__header p {
+    font-size: 0.70rem;
+  }
+
+  .player[data-player-mode="compact"] .controls {
+    grid-template-columns: auto 1fr;
+    justify-items: stretch;
+    gap: 12px;
+  }
+
+  .player[data-player-mode="compact"] .volume-group {
+    min-width: 0;
+  }
+
+  .player[data-player-mode="compact"] #eqToggleLabel {
+    display: none;
+  }
+}
