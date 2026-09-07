@@ -1,4 +1,8 @@
 (() => {
+  const app = window.RadioApp || {};
+  const audio = app.audio;
+  const radio = audio?.element;
+
   const panel = document.getElementById("equalizerPanel");
   const toggle = document.getElementById("eqToggle");
   const toggleLabel = document.getElementById("eqToggleLabel");
@@ -12,6 +16,8 @@
   const sliders = Array.from(document.querySelectorAll("[data-eq-band]"));
 
   if (
+    !audio ||
+    !radio ||
     !panel ||
     !toggle ||
     !toggleLabel ||
@@ -235,7 +241,7 @@
     try {
       radio.removeAttribute("crossorigin");
       radio.load();
-      if (wasPlaying) await radio.play();
+      if (wasPlaying) await audio.play();
     } catch (error) {
       console.error("No se pudo restaurar automáticamente la transmisión:", error);
     }
@@ -257,10 +263,10 @@
       return false;
     }
 
-    const wasPlaying = typeof isRadioPlaying === "function" && isRadioPlaying();
+    const wasPlaying = audio.isPlaying();
 
     try {
-      if (wasPlaying) radio.pause();
+      if (wasPlaying) audio.pause();
 
       radio.crossOrigin = "anonymous";
       radio.load();
@@ -289,7 +295,7 @@
       applyBandValues();
       applyMasterGain();
 
-      if (wasPlaying) await radio.play();
+      if (wasPlaying) await audio.play();
 
       setMessage("Ecualizador listo. Los cambios se aplican al audio real.");
       return true;
@@ -385,6 +391,13 @@
       }
     }
   });
+
+  app.equalizer = Object.freeze({
+    setEnabled,
+    isEnabled: () => enabled,
+    isReady: () => graphReady
+  });
+  window.RadioApp = app;
 
   restoreCollapsedState();
 
