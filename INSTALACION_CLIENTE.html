@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instalación — Alcatraz Radio Player</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;line-height:1.55;color:#17212b;max-width:900px;margin:40px auto;padding:0 24px;background:#f7f9fb}main{background:#fff;padding:36px;border-radius:18px;box-shadow:0 8px 28px rgba(0,0,0,.08)}h1,h2{color:#1d3042}h1{margin-top:0}code,pre{background:#eef3f7;border-radius:8px}code{padding:2px 6px}pre{padding:14px;overflow:auto}.notice{padding:14px 16px;border-left:5px solid #ff7f77;background:#fff3f1;border-radius:8px}.ok{padding:14px 16px;border-left:5px solid #57c7a5;background:#eefaf6;border-radius:8px}li{margin:.35rem 0}@media print{body{background:#fff;margin:0}main{box-shadow:none;padding:0}}</style>
+</head>
+<body><main>
+<h1>Alcatraz Radio Player</h1>
+<p><strong>Guía de instalación y prueba en WordPress</strong></p>
+<p>Versión MVP de prueba para validar el reproductor en el sitio real de Alcatraz Radio FM.</p>
+<div class="notice"><strong>Importante:</strong> no sustituya todavía el reproductor actual. Instale el plugin y realice primero la prueba en una página privada.</div>
+<h2>1. Instalación</h2>
+<ol><li>Entre al panel de administración de WordPress.</li><li>Vaya a <strong>Plugins → Añadir plugin</strong>.</li><li>Pulse <strong>Subir plugin</strong>.</li><li>Seleccione <code>alcatraz-radio-player-v0.1.1-prueba.zip</code>.</li><li>Pulse <strong>Instalar ahora</strong>.</li><li>Pulse <strong>Activar plugin</strong>.</li><li>Confirme que <strong>Alcatraz Radio Player</strong> aparece activo.</li></ol>
+<h2>2. Crear una página privada de prueba</h2>
+<ol><li>Vaya a <strong>Páginas → Añadir nueva</strong>.</li><li>Agregue un bloque <strong>Shortcode</strong>.</li><li>Use uno de los modos siguientes.</li><li>Publique la página como privada o protegida con contraseña.</li></ol>
+<h2>3. Modo compacto</h2>
+<pre>[radio_player mode="compact"]</pre>
+<p>Recomendado para espacios reducidos, columnas o una integración más pequeña. Incluye Play/Pause, mute, volumen, visualizador, ecualizador retráctil, Media Session y barra inferior sincronizada.</p>
+<h2>4. Modo completo</h2>
+<pre>[radio_player mode="full"]</pre>
+<p>Recomendado para una página dedicada o una sección amplia. Mantiene todos los controles y permite desplegar el ecualizador de 10 bandas.</p>
+<h2>5. Barra inferior</h2>
+<p>La barra inferior comparte el mismo audio del reproductor principal. Play/Pause, mute y volumen quedan sincronizados. Se puede ocultar con <strong>×</strong> y restaurar con el botón flotante del logo.</p>
+<h2>6. Ecualizador</h2>
+<p>El ecualizador afecta únicamente al oyente que lo ajusta. No modifica la transmisión original ni el sonido de otros usuarios. Incluye Flat, Bass, Vocal, Pop, Rock, Manual y bandas de 32 Hz a 16 kHz.</p>
+<h2>7. Checklist de prueba</h2>
+<ul><li>Play y Pause funcionan.</li><li>Mute y desmute funcionan.</li><li>Volumen principal funciona.</li><li>Volumen de la barra inferior funciona y se sincroniza.</li><li>Visualizador se anima durante reproducción.</li><li>En pausa aparece el nombre sólido de la emisora.</li><li>Ecualizador abre/cierra y sus presets producen cambios audibles.</li><li>Barra inferior puede ocultarse y restaurarse.</li><li>No hay elementos cortados o fuera del diseño.</li><li>Se prueba en computadora y móvil.</li></ul>
+<h2>8. Limitación actual del MVP</h2>
+<p>Esta versión admite <strong>una sola instancia funcional del shortcode por página</strong>.</p>
+<h2>9. Si algo falla</h2>
+<ol><li>Mantenga la página de prueba privada.</li><li>Vaya a <strong>Plugins</strong>.</li><li>Desactive <strong>Alcatraz Radio Player</strong>.</li><li>El resto del sitio debe continuar funcionando normalmente.</li></ol>
+<h2>10. Retroalimentación solicitada</h2>
+<p>Por cada problema envíe captura de pantalla, dispositivo, navegador, modo usado, acción realizada, resultado esperado y resultado obtenido. También indique su opinión sobre tamaño, controles, barra inferior, modo compacto, modo full, ecualizador y comportamiento móvil.</p>
+<div class="ok"><strong>Objetivo de esta prueba:</strong> validar el plugin sin retirar el reproductor actual y recopilar retroalimentación antes de ponerlo en producción.</div>
+<p><strong>Autor:</strong> Ermógenes Rodríguez Fernández</p>
+</main></body></html>
