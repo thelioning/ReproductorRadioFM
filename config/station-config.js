@@ -22,7 +22,7 @@ window.STATION_CONFIG = Object.freeze({
   presentation: {
     mode: "compact",
     compact: {
-      showVisualizer: false,
+      showVisualizer: true,
       showVolume: true,
       showStatus: false,
       equalizerCollapsedByDefault: true
