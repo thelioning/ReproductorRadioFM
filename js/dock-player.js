@@ -1,18 +1,21 @@
 (() => {
+  const app = window.RadioApp || {};
+  const audio = app.audio;
+  const ui = app.ui;
+  const config = window.STATION_CONFIG || {};
+
   const dock = document.getElementById("radioDock");
   const launcher = document.getElementById("radioDockLauncher");
   const closeButton = document.getElementById("dockCloseButton");
   const dockPlayButton = document.getElementById("dockPlayButton");
   const dockMuteButton = document.getElementById("dockMuteButton");
 
-  if (!dock || !launcher || !closeButton || !dockPlayButton || !dockMuteButton) {
+  if (!audio || !dock || !launcher || !closeButton || !dockPlayButton || !dockMuteButton) {
     return;
   }
 
-  const config = window.STATION_CONFIG || {};
   const storageNamespace = config.storageNamespace || "radio-player";
   const STORAGE_KEY = `${storageNamespace}-dock-hidden`;
-  const mediaSessionEnabled = config.features?.mediaSession !== false;
 
   function setDockHidden(hidden, persist = true) {
     dock.classList.toggle("is-hidden", hidden);
@@ -29,18 +32,14 @@
   }
 
   function syncPlayUI() {
-    const playing = typeof isRadioPlaying === "function" && isRadioPlaying();
+    const playing = audio.isPlaying();
 
     dockPlayButton.classList.toggle("is-playing", playing);
     dockPlayButton.setAttribute("aria-label", playing ? "Pausar transmisión" : "Reproducir transmisión");
-
-    if (mediaSessionEnabled && "mediaSession" in navigator) {
-      navigator.mediaSession.playbackState = playing ? "playing" : "paused";
-    }
   }
 
   function syncMuteUI() {
-    const muted = typeof isMuted === "function" && isMuted();
+    const muted = audio.isMuted();
 
     dockMuteButton.classList.toggle("is-muted", muted);
     dockMuteButton.setAttribute("aria-label", muted ? "Activar sonido" : "Silenciar");
@@ -48,28 +47,22 @@
 
   async function startPlayback() {
     try {
-      await playRadio();
+      await audio.play();
       syncPlayUI();
-
-      if (typeof updatePlayUI === "function") {
-        updatePlayUI();
-      }
+      ui?.updatePlayUI?.();
     } catch (error) {
       console.error("No se pudo iniciar la transmisión desde el reproductor inferior:", error);
     }
   }
 
   function stopPlayback() {
-    pauseRadio();
+    audio.pause();
     syncPlayUI();
-
-    if (typeof updatePlayUI === "function") {
-      updatePlayUI();
-    }
+    ui?.updatePlayUI?.();
   }
 
   dockPlayButton.addEventListener("click", async () => {
-    if (isRadioPlaying()) {
+    if (audio.isPlaying()) {
       stopPlayback();
       return;
     }
@@ -78,59 +71,18 @@
   });
 
   dockMuteButton.addEventListener("click", () => {
-    toggleMute();
+    audio.toggleMute();
     syncMuteUI();
-
-    if (typeof updateVolumeUI === "function") {
-      updateVolumeUI();
-    }
+    ui?.updateVolumeUI?.();
   });
 
-  closeButton.addEventListener("click", () => {
-    setDockHidden(true);
-  });
+  closeButton.addEventListener("click", () => setDockHidden(true));
+  launcher.addEventListener("click", () => setDockHidden(false));
 
-  launcher.addEventListener("click", () => {
-    setDockHidden(false);
-  });
-
-  radio.addEventListener("playing", syncPlayUI);
-  radio.addEventListener("pause", syncPlayUI);
-  radio.addEventListener("ended", syncPlayUI);
-  radio.addEventListener("volumechange", syncMuteUI);
-
-  function registerMediaAction(action, handler) {
-    if (!mediaSessionEnabled || !("mediaSession" in navigator)) {
-      return;
-    }
-
-    try {
-      navigator.mediaSession.setActionHandler(action, handler);
-    } catch (error) {
-      console.debug(`Acción Media Session no disponible: ${action}`);
-    }
-  }
-
-  if (mediaSessionEnabled && "mediaSession" in navigator && "MediaMetadata" in window) {
-    const artwork = config.logo
-      ? [{ src: config.logo, type: "image/png" }]
-      : [];
-
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: config.name || "Radio FM",
-      artist: config.tagline || "Transmisión en vivo",
-      album: config.slogan || "Radio en vivo",
-      artwork
-    });
-
-    registerMediaAction("play", startPlayback);
-    registerMediaAction("pause", stopPlayback);
-    registerMediaAction("stop", stopPlayback);
-    registerMediaAction("previoustrack", null);
-    registerMediaAction("nexttrack", null);
-    registerMediaAction("seekbackward", null);
-    registerMediaAction("seekforward", null);
-  }
+  audio.element.addEventListener("playing", syncPlayUI);
+  audio.element.addEventListener("pause", syncPlayUI);
+  audio.element.addEventListener("ended", syncPlayUI);
+  audio.element.addEventListener("volumechange", syncMuteUI);
 
   let savedHidden = false;
 
@@ -139,6 +91,13 @@
   } catch (error) {
     savedHidden = false;
   }
+
+  app.dock = Object.freeze({
+    setHidden: setDockHidden,
+    syncPlayUI,
+    syncMuteUI
+  });
+  window.RadioApp = app;
 
   setDockHidden(savedHidden, false);
   syncPlayUI();
