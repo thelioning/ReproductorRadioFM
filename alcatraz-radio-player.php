@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Alcatraz Radio Player
  * Description: Reproductor de radio online white-label con modos compacto y completo, barra inferior, Media Session y ecualizador.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Ermógenes Rodríguez Fernández
  * Text Domain: alcatraz-radio-player
  */
@@ -11,34 +11,43 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('ARF_VERSION', '0.1.0');
+define('ARF_VERSION', '0.1.1');
 define('ARF_PLUGIN_FILE', __FILE__);
 define('ARF_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ARF_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 /**
+ * Durante desarrollo usa la fecha real del archivo como versión para impedir
+ * que WordPress o el navegador conserven CSS/JS antiguos después de un cambio.
+ */
+function arf_asset_version($relative_path) {
+    $file = ARF_PLUGIN_DIR . ltrim($relative_path, '/');
+    return file_exists($file) ? (string) filemtime($file) : ARF_VERSION;
+}
+
+/**
  * Registra los recursos del reproductor sin cargarlos hasta que exista shortcode.
  */
 function arf_register_assets() {
-    wp_register_style('arf-styles', ARF_PLUGIN_URL . 'css/styles.css', array(), ARF_VERSION);
-    wp_register_style('arf-visualizer', ARF_PLUGIN_URL . 'css/visualizer.css', array('arf-styles'), ARF_VERSION);
-    wp_register_style('arf-equalizer', ARF_PLUGIN_URL . 'css/equalizer.css', array('arf-styles'), ARF_VERSION);
-    wp_register_style('arf-dock', ARF_PLUGIN_URL . 'css/dock-player.css', array('arf-styles'), ARF_VERSION);
-    wp_register_style('arf-presentation', ARF_PLUGIN_URL . 'css/presentation.css', array('arf-styles'), ARF_VERSION);
-    wp_register_style('arf-wordpress', ARF_PLUGIN_URL . 'css/wordpress.css', array('arf-styles'), ARF_VERSION);
+    wp_register_style('arf-styles', ARF_PLUGIN_URL . 'css/styles.css', array(), arf_asset_version('css/styles.css'));
+    wp_register_style('arf-visualizer', ARF_PLUGIN_URL . 'css/visualizer.css', array('arf-styles'), arf_asset_version('css/visualizer.css'));
+    wp_register_style('arf-equalizer', ARF_PLUGIN_URL . 'css/equalizer.css', array('arf-styles'), arf_asset_version('css/equalizer.css'));
+    wp_register_style('arf-dock', ARF_PLUGIN_URL . 'css/dock-player.css', array('arf-styles'), arf_asset_version('css/dock-player.css'));
+    wp_register_style('arf-presentation', ARF_PLUGIN_URL . 'css/presentation.css', array('arf-styles'), arf_asset_version('css/presentation.css'));
+    wp_register_style('arf-wordpress', ARF_PLUGIN_URL . 'css/wordpress.css', array('arf-styles'), arf_asset_version('css/wordpress.css'));
 
-    wp_register_script('arf-station-bootstrap', ARF_PLUGIN_URL . 'js/station-bootstrap.js', array(), ARF_VERSION, true);
-    wp_register_script('arf-audio-engine', ARF_PLUGIN_URL . 'js/audio-engine.js', array('arf-station-bootstrap'), ARF_VERSION, true);
-    wp_register_script('arf-player-ui', ARF_PLUGIN_URL . 'js/player-ui.js', array('arf-audio-engine'), ARF_VERSION, true);
-    wp_register_script('arf-visualizer', ARF_PLUGIN_URL . 'js/visualizer.js', array('arf-audio-engine'), ARF_VERSION, true);
-    wp_register_script('arf-equalizer', ARF_PLUGIN_URL . 'js/equalizer.js', array('arf-audio-engine'), ARF_VERSION, true);
-    wp_register_script('arf-dock-player', ARF_PLUGIN_URL . 'js/dock-player.js', array('arf-audio-engine'), ARF_VERSION, true);
-    wp_register_script('arf-media-session', ARF_PLUGIN_URL . 'js/media-session.js', array('arf-audio-engine'), ARF_VERSION, true);
+    wp_register_script('arf-station-bootstrap', ARF_PLUGIN_URL . 'js/station-bootstrap.js', array(), arf_asset_version('js/station-bootstrap.js'), true);
+    wp_register_script('arf-audio-engine', ARF_PLUGIN_URL . 'js/audio-engine.js', array('arf-station-bootstrap'), arf_asset_version('js/audio-engine.js'), true);
+    wp_register_script('arf-player-ui', ARF_PLUGIN_URL . 'js/player-ui.js', array('arf-audio-engine'), arf_asset_version('js/player-ui.js'), true);
+    wp_register_script('arf-visualizer', ARF_PLUGIN_URL . 'js/visualizer.js', array('arf-audio-engine'), arf_asset_version('js/visualizer.js'), true);
+    wp_register_script('arf-equalizer', ARF_PLUGIN_URL . 'js/equalizer.js', array('arf-audio-engine'), arf_asset_version('js/equalizer.js'), true);
+    wp_register_script('arf-dock-player', ARF_PLUGIN_URL . 'js/dock-player.js', array('arf-audio-engine'), arf_asset_version('js/dock-player.js'), true);
+    wp_register_script('arf-media-session', ARF_PLUGIN_URL . 'js/media-session.js', array('arf-audio-engine'), arf_asset_version('js/media-session.js'), true);
     wp_register_script(
         'arf-app',
         ARF_PLUGIN_URL . 'js/app.js',
         array('arf-player-ui', 'arf-visualizer', 'arf-equalizer', 'arf-dock-player', 'arf-media-session'),
-        ARF_VERSION,
+        arf_asset_version('js/app.js'),
         true
     );
 }
