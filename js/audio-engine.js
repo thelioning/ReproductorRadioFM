@@ -1,54 +1,74 @@
-const radio = document.getElementById("radio");
+(() => {
+  const audioElement = document.getElementById("radio");
 
-const DEFAULT_VOLUME = 0.8;
-let lastVolumeBeforeMute = DEFAULT_VOLUME;
-
-radio.volume = DEFAULT_VOLUME;
-
-async function playRadio() {
-  await radio.play();
-}
-
-function pauseRadio() {
-  radio.pause();
-}
-
-function setVolume(value) {
-  const numericValue = Math.min(1, Math.max(0, Number(value)));
-
-  radio.volume = numericValue;
-
-  if (numericValue > 0) {
-    lastVolumeBeforeMute = numericValue;
-    radio.muted = false;
+  if (!audioElement) {
+    console.error("No se encontró el elemento de audio principal.");
+    return;
   }
 
-  return radio.volume;
-}
+  const DEFAULT_VOLUME = 0.8;
+  let lastVolumeBeforeMute = DEFAULT_VOLUME;
 
-function toggleMute() {
-  if (radio.muted || radio.volume === 0) {
-    radio.muted = false;
+  audioElement.volume = DEFAULT_VOLUME;
 
-    if (radio.volume === 0) {
-      radio.volume = lastVolumeBeforeMute || DEFAULT_VOLUME;
+  async function play() {
+    await audioElement.play();
+  }
+
+  function pause() {
+    audioElement.pause();
+  }
+
+  function setVolume(value) {
+    const numericValue = Math.min(1, Math.max(0, Number(value)));
+
+    audioElement.volume = numericValue;
+
+    if (numericValue > 0) {
+      lastVolumeBeforeMute = numericValue;
+      audioElement.muted = false;
     }
-  } else {
-    lastVolumeBeforeMute = radio.volume || DEFAULT_VOLUME;
-    radio.muted = true;
+
+    return audioElement.volume;
   }
 
-  return radio.muted;
-}
+  function toggleMute() {
+    if (audioElement.muted || audioElement.volume === 0) {
+      audioElement.muted = false;
 
-function isMuted() {
-  return radio.muted || radio.volume === 0;
-}
+      if (audioElement.volume === 0) {
+        audioElement.volume = lastVolumeBeforeMute || DEFAULT_VOLUME;
+      }
+    } else {
+      lastVolumeBeforeMute = audioElement.volume || DEFAULT_VOLUME;
+      audioElement.muted = true;
+    }
 
-function isRadioPlaying() {
-  return !radio.paused && !radio.ended;
-}
+    return audioElement.muted;
+  }
 
-function getVolume() {
-  return radio.volume;
-}
+  function isMuted() {
+    return audioElement.muted || audioElement.volume === 0;
+  }
+
+  function isPlaying() {
+    return !audioElement.paused && !audioElement.ended;
+  }
+
+  function getVolume() {
+    return audioElement.volume;
+  }
+
+  window.RadioApp = window.RadioApp || {};
+  window.RadioApp.audio = Object.freeze({
+    element: audioElement,
+    defaultVolume: DEFAULT_VOLUME,
+    play,
+    pause,
+    setVolume,
+    toggleMute,
+    isMuted,
+    isPlaying,
+    getVolume
+  });
+})();
