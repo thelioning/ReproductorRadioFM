@@ -1,8 +1,12 @@
-* {
+.radio-player-page,
+.radio-player-page *,
+.arf-player-host,
+.arf-player-host * {
   box-sizing: border-box;
 }
 
-:root {
+.radio-player-page,
+.arf-player-host {
   color-scheme: dark;
   font-family: Arial, Helvetica, sans-serif;
 
