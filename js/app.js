@@ -2,7 +2,7 @@
   const app = window.RadioApp || {};
 
   app.config = window.STATION_CONFIG || {};
-  app.version = "0.3.0";
+  app.version = "0.4.0";
 
   const requiredModules = ["audio", "ui", "dock"];
   const missingModules = requiredModules.filter((name) => !app[name]);
@@ -19,6 +19,17 @@
     return;
   }
 
+  const presentation = app.presentation || { mode: "full" };
+
+  if (presentation.mode === "compact" && presentation.equalizerCollapsedByDefault !== false) {
+    const equalizerPanel = document.getElementById("equalizerPanel");
+    const collapseButton = document.getElementById("eqCollapse");
+
+    if (equalizerPanel && collapseButton && !equalizerPanel.classList.contains("is-collapsed")) {
+      collapseButton.click();
+    }
+  }
+
   app.ready = true;
   window.RadioApp = app;
 
@@ -26,7 +37,8 @@
   window.dispatchEvent(new CustomEvent("radioapp:ready", {
     detail: {
       stationId: app.config.id || "radio-player",
-      version: app.version
+      version: app.version,
+      mode: presentation.mode || "full"
     }
   }));
 })();
