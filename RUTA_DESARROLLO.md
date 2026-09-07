@@ -153,27 +153,35 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 ## Widget compacto
 
 - [x] Crear rama `feature/widget-compact`
-- [ ] Crear modo `compact`
-- [ ] Logo
-- [ ] Nombre
-- [ ] LIVE
-- [ ] Play/Pause
-- [ ] Mute
-- [ ] Volumen opcional
-- [ ] Ecualizador cerrado por defecto
-- [ ] Responsive para columnas y sidebars
-- [ ] Mantener el mismo motor `RadioApp.audio`
-- [ ] Mantener sincronía con barra inferior y Media Session
-- [ ] Probar ancho aproximado de widget WordPress real
+- [x] Crear modo `compact`
+- [x] Logo
+- [x] Nombre
+- [x] LIVE
+- [x] Play/Pause
+- [x] Mute
+- [x] Volumen opcional
+- [x] Ecualizador cerrado por defecto
+- [x] Mantener visualizador en modo compacto
+- [x] Mostrar nombre sólido en pausa y retomar animación en reproducción
+- [x] Implementar responsive para columnas y sidebars con Container Queries
+- [x] Mantener el mismo motor `RadioApp.audio`
+- [ ] Mantener sincronía con barra inferior y Media Session — validación final en modo compacto
+- [x] Crear banco de prueba `dev/widget-preview.html`
+- [ ] Validar ancho 470 px
+- [ ] Validar ancho 400 px
+- [ ] Validar ancho 360 px
+- [ ] Validar ancho 320 px
+- [ ] Validar ecualizador plegado y desplegado en esos anchos
 
 ## Reproductor completo
 
-- [ ] Formalizar modo `full`
+- [x] Formalizar modo `full` en configuración
 - [x] Visualizador completo
 - [x] Volumen
 - [x] Ecualizador
 - [x] Presets
 - [x] Estado de transmisión
+- [ ] Revalidar modo `full` después de cerrar la Fase 4
 
 ## Barra inferior
 
@@ -273,12 +281,13 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Construir el modo `compact` sin duplicar el motor de audio.
-2. Mantener `full` como presentación actual.
-3. Hacer que el modo se seleccione desde configuración.
-4. Ajustar el compacto a un ancho típico de columna/widget WordPress.
-5. Probar Play/Pause, mute, volumen opcional, ecualizador plegado y sincronía con la barra inferior.
-6. Tras aprobar el modo compacto, integrar Fase 4 a `main` y comenzar el plugin WordPress MVP.
+1. Abrir `dev/widget-preview.html`.
+2. Validar el mismo widget a 470, 400, 360 y 320 px.
+3. En cada ancho probar Play/Pause, nombre sólido en pausa, visualizador animado, mute y volumen.
+4. Desplegar el ecualizador y verificar que sus 10 bandas siguen accesibles mediante desplazamiento horizontal cuando sea necesario.
+5. Comprobar barra inferior y Media Session en modo compacto.
+6. Revalidar `presentation.mode = "full"` antes de integrar la Fase 4 a `main`.
+7. Tras aprobación, iniciar el plugin WordPress MVP.
 
 ---
 
