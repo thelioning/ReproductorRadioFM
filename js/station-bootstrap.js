@@ -7,6 +7,7 @@
   }
 
   const root = document.documentElement;
+  const host = document.querySelector(".arf-player-host");
   const theme = config.theme || {};
   const presentation = config.presentation || {};
   const mode = presentation.mode === "compact" ? "compact" : "full";
@@ -36,9 +37,11 @@
     "--live": theme.live
   };
 
+  const themeTarget = config.standalonePage === false && host ? host : root;
+
   Object.entries(cssVariables).forEach(([name, value]) => {
     if (value) {
-      root.style.setProperty(name, value);
+      themeTarget.style.setProperty(name, value);
     }
   });
 
