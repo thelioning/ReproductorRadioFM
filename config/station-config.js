@@ -19,6 +19,21 @@ window.STATION_CONFIG = Object.freeze({
     accentPurple: "#bc74ee",
     live: "#ff0022"
   },
+  presentation: {
+    mode: "compact",
+    compact: {
+      showVisualizer: false,
+      showVolume: true,
+      showStatus: false,
+      equalizerCollapsedByDefault: true
+    },
+    full: {
+      showVisualizer: true,
+      showVolume: true,
+      showStatus: true,
+      equalizerCollapsedByDefault: true
+    }
+  },
   features: {
     visualizer: true,
     equalizer: true,
