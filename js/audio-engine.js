@@ -71,8 +71,4 @@
     isPlaying,
     getVolume
   });
-
-  // Compatibilidad temporal mientras el ecualizador termina su migración al namespace RadioApp.
-  window.radio = audioElement;
-  window.isRadioPlaying = isPlaying;
 })();
