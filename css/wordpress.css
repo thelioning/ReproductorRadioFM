@@ -1,0 +1,15 @@
+.arf-player-host {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.arf-player-host .player {
+  max-width: 100%;
+}
+
+.arf-player-host[hidden] {
+  display: none !important;
+}
