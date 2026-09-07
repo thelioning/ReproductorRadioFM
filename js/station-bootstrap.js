@@ -8,6 +8,17 @@
 
   const root = document.documentElement;
   const theme = config.theme || {};
+  const presentation = config.presentation || {};
+  const mode = presentation.mode === "compact" ? "compact" : "full";
+  const modeOptions = presentation[mode] || {};
+
+  if (!document.querySelector('link[data-radio-presentation]')) {
+    const presentationStylesheet = document.createElement("link");
+    presentationStylesheet.rel = "stylesheet";
+    presentationStylesheet.href = "css/presentation.css";
+    presentationStylesheet.dataset.radioPresentation = "true";
+    document.head.appendChild(presentationStylesheet);
+  }
 
   const cssVariables = {
     "--bg-page": theme.bgPage,
@@ -36,6 +47,8 @@
   const radio = document.getElementById("radio");
   const mainPlayer = document.querySelector(".player");
   const brandSection = document.querySelector(".brand-static");
+  const volumeGroup = document.querySelector(".volume-group");
+  const status = document.getElementById("status");
   const dock = document.getElementById("radioDock");
   const launcher = document.getElementById("radioDockLauncher");
 
@@ -61,13 +74,25 @@
     image.alt = `Logo de ${config.name}`;
   });
 
-  if (mainPlayer) mainPlayer.setAttribute("aria-label", `Reproductor de ${config.name}`);
+  if (mainPlayer) {
+    mainPlayer.setAttribute("aria-label", `Reproductor de ${config.name}`);
+    mainPlayer.dataset.playerMode = mode;
+  }
+
+  document.body.dataset.playerMode = mode;
+
   if (brandSection) brandSection.setAttribute("aria-label", `Identidad visual de ${config.name}`);
   if (dock) dock.setAttribute("aria-label", `Reproductor fijo de ${config.name}`);
   if (launcher) launcher.setAttribute("aria-label", `Mostrar reproductor de ${config.name}`);
 
   const features = config.features || {};
-  if (features.visualizer === false && brandSection) brandSection.hidden = true;
+  const showVisualizer = features.visualizer !== false && modeOptions.showVisualizer !== false;
+  const showVolume = modeOptions.showVolume !== false;
+  const showStatus = modeOptions.showStatus !== false;
+
+  if (brandSection) brandSection.hidden = !showVisualizer;
+  if (volumeGroup) volumeGroup.hidden = !showVolume;
+  if (status) status.hidden = !showStatus;
 
   const equalizerPanel = document.getElementById("equalizerPanel");
   if (features.equalizer === false && equalizerPanel) equalizerPanel.hidden = true;
@@ -76,4 +101,10 @@
     if (dock) dock.hidden = true;
     if (launcher) launcher.hidden = true;
   }
+
+  window.RadioApp = window.RadioApp || {};
+  window.RadioApp.presentation = Object.freeze({
+    mode,
+    ...modeOptions
+  });
 })();
