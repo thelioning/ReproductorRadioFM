@@ -1,5 +1,15 @@
 (() => {
-  const config = window.STATION_CONFIG;
+  const host = document.querySelector(".arf-player-host");
+  let config = window.STATION_CONFIG;
+
+  if (!config && host?.dataset.radioConfig) {
+    try {
+      config = JSON.parse(host.dataset.radioConfig);
+      window.STATION_CONFIG = Object.freeze(config);
+    } catch (error) {
+      console.error("No fue posible leer la configuración embebida del reproductor.", error);
+    }
+  }
 
   if (!config) {
     console.error("No se encontró STATION_CONFIG. El reproductor no puede inicializar la marca de la emisora.");
@@ -7,7 +17,6 @@
   }
 
   const root = document.documentElement;
-  const host = document.querySelector(".arf-player-host");
   const theme = config.theme || {};
   const presentation = config.presentation || {};
   const mode = presentation.mode === "compact" ? "compact" : "full";
