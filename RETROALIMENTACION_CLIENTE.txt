@@ -1,0 +1,66 @@
+ALCATRAZ RADIO PLAYER — FORMULARIO DE RETROALIMENTACIÓN
+
+Fecha de prueba:
+Nombre de quien realiza la prueba:
+
+1. ENTORNO
+- Dispositivo: PC / Android / iPhone / Tablet / Otro:
+- Navegador y versión si la conoce:
+- Tema de WordPress utilizado:
+
+2. MODO PROBADO
+[ ] Compact
+[ ] Full
+[ ] Ambos
+
+3. FUNCIONES
+Marque OK o describa el problema.
+
+- Play/Pause:
+- Mute/Desmute:
+- Volumen principal:
+- Volumen barra inferior:
+- Sincronización barra inferior:
+- Visualizador:
+- Ecualizador abrir/cerrar:
+- Presets del ecualizador:
+- Faders manuales:
+- Ocultar/restaurar barra inferior:
+- Controles del sistema/Media Session:
+
+4. APARIENCIA
+- ¿El tamaño del reproductor le parece adecuado?
+- ¿Los controles se entienden fácilmente?
+- ¿El modo compacto se integra bien en la página?
+- ¿El modo full se ve correctamente?
+- ¿La barra inferior resulta útil o molesta?
+- ¿Detectó textos, botones o elementos cortados?
+
+5. MÓVIL
+- ¿El reproductor cabe correctamente en pantalla?
+- ¿Puede usar todos los controles?
+- ¿El ecualizador se puede desplazar y utilizar?
+- ¿La barra inferior funciona correctamente?
+
+6. PROBLEMAS ENCONTRADOS
+Por cada problema incluya:
+- captura de pantalla;
+- acción que estaba realizando;
+- resultado esperado;
+- resultado obtenido;
+- si ocurre siempre o algunas veces.
+
+Problema 1:
+
+Problema 2:
+
+Problema 3:
+
+7. OPINIÓN GENERAL
+- Lo que más le gustó:
+
+- Lo que cambiaría:
+
+- ¿Considera que está listo para sustituir el reproductor actual? Sí / No / Con ajustes
+
+Comentarios adicionales:
