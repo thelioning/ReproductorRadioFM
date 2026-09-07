@@ -195,7 +195,8 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Ocultar/restaurar
 - [x] Sincronía básica
 - [x] Adaptarla a configuración white-label
-- [ ] Validar en páginas reales
+- [x] Validar en páginas reales
+- [x] Control de volumen sincronizado con el reproductor principal
 
 ### Criterio de cierre
 
@@ -220,13 +221,18 @@ El mismo núcleo debe funcionar en modo `compact` y `full`, mantener sincronía 
 - [x] Evitar que los estilos de página del reproductor alteren el `body` de WordPress
 - [x] Evitar que el plugin cambie el título de la página WordPress
 - [x] Aislar las variables visuales principales dentro del contenedor del reproductor
-- [ ] Probar activación del plugin en WordPress local
-- [ ] Probar shortcode compacto en una página WordPress
-- [ ] Probar shortcode full en una página WordPress
-- [ ] Verificar Play/Pause, mute, volumen, visualizador, ecualizador, dock y Media Session dentro de WordPress
-- [ ] Revisar consola sin errores en WordPress
+- [x] Probar activación del plugin en WordPress local
+- [x] Probar shortcode compacto en una página WordPress
+- [x] Probar shortcode full en una página WordPress
+- [x] Verificar Play/Pause, mute, volumen, visualizador, ecualizador, dock y Media Session dentro de WordPress
+- [x] Validar control de volumen sincronizado en la barra inferior de WordPress
+- [ ] Revisar consola sin errores en WordPress después de los últimos ajustes
 - [ ] Probar con el sitio WordPress de Alcatraz
 - [ ] Probar con otro tema WordPress
+
+**Resultado WordPress local:** el plugin fue detectado y activado mediante enlace de desarrollo en `wp-content/plugins`. Los modos `compact` y `full` cargan dentro de una página WordPress real, reproducen el stream y mantienen sincronizados los controles principales, el visualizador, el ecualizador, la barra inferior y Media Session.
+
+**Nota de integración:** la posición vertical del shortcode dentro de la página depende del tema/plantilla de WordPress. El plugin no debe compensar el espaciado del tema con márgenes negativos globales.
 
 **Nota MVP:** por ahora se admite una sola instancia funcional del shortcode por página, para conservar IDs únicos y un único motor de audio.
 
@@ -304,13 +310,11 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Preparar un WordPress local de pruebas.
-2. Instalar/activar este repositorio como plugin de desarrollo.
-3. Crear una página y colocar `[radio_player mode="compact"]`.
-4. Validar el widget dentro de un tema real de WordPress.
-5. Probar `[radio_player mode="full"]` en una página separada.
-6. Corregir cualquier conflicto de CSS/JS antes de probar en el sitio real de Alcatraz.
-7. Solo después de aprobar WordPress local, probar en el sitio del cliente.
+1. Revisar la consola de WordPress local después de los últimos ajustes y confirmar que no quedan errores propios del plugin.
+2. Probar el plugin con un segundo tema WordPress para detectar conflictos de CSS/JS.
+3. Repetir la prueba en `compact` y `full` con ese segundo tema.
+4. Si ambas pruebas son correctas, preparar la prueba controlada en el sitio WordPress de Alcatraz.
+5. Solo después de aprobar el sitio real, cerrar Fase 5 e iniciar el panel administrativo de la Fase 6.
 
 ---
 
