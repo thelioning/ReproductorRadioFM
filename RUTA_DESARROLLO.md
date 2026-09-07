@@ -109,6 +109,7 @@ Sacar del código todos los datos específicos de Alcatraz y convertirlos en con
 - [x] Mover opciones del ecualizador a configuración
 - [x] Mover opciones de barra inferior a configuración
 - [x] Mover opciones de Media Session a configuración
+- [x] Validar que Alcatraz conserva el mismo sonido y apariencia después de la refactorización
 - [ ] Eliminar textos y rutas de Alcatraz hardcodeados del núcleo
 - [ ] Probar una segunda emisora ficticia cambiando solo configuración y assets
 
@@ -160,7 +161,7 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 - [x] Barra fija funcional
 - [x] Ocultar/restaurar
 - [x] Sincronía básica
-- [x] Adaptarla a configuración white-label
+- [ ] Adaptarla a configuración white-label
 - [ ] Validar en páginas reales
 
 ---
@@ -253,11 +254,11 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Probar la nueva configuración white-label sin cambiar la apariencia de Alcatraz.
-2. Eliminar los últimos nombres/rutas específicos de Alcatraz que permanezcan en el núcleo.
-3. Crear una segunda configuración ficticia para demostrar que el mismo motor sirve para otra emisora.
-4. Crear el modo `compact` pensado para widget/columna de WordPress.
-5. Validar `compact` y `full` antes de iniciar el plugin WordPress.
+1. Crear una segunda configuración de emisora para demostrar el white-label.
+2. Verificar que el cambio de nombre, logo, colores y stream no requiere modificar el núcleo.
+3. Eliminar referencias restantes de Alcatraz dentro de los módulos funcionales.
+4. Cerrar Fase 2.
+5. Iniciar el modo `compact` para convertir el reproductor en widget embebible.
 
 ---
 
