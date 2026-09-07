@@ -5,7 +5,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 ## Estado actual
 
 - Rama estable objetivo: `main`
-- Rama de trabajo actual: `feature/config-white-label`
+- Rama de trabajo actual: `feature/reorganizacion-arquitectura`
 - Producto de referencia: Alcatraz Radio FM
 - Meta comercial: reproductor white-label reutilizable e integrable en WordPress
 
@@ -125,13 +125,22 @@ Debe ser posible crear una nueva emisora sin modificar el motor de audio ni los 
 
 - [x] Crear estructura `config/`
 - [x] Crear estructura `assets/branding/`
-- [ ] Separar `player-ui.js`
-- [ ] Separar `media-session.js`
-- [ ] Crear `app.js` como punto de inicialización
-- [ ] Reducir variables globales
-- [ ] Mantener una sola fuente de verdad para reproducción, mute y volumen
+- [x] Separar `player-ui.js`
+- [x] Separar `media-session.js`
+- [x] Crear `app.js` como coordinador principal de inicialización
+- [x] Reducir variables globales usando el namespace `RadioApp`
+- [x] Mantener una sola fuente de verdad para reproducción, mute y volumen
 - [x] Confirmar que ningún módulo crea un segundo stream
 - [x] Confirmar que el ecualizador usa el mismo audio
+- [x] Migrar visualizador al motor de audio compartido
+- [x] Migrar ecualizador al motor de audio compartido
+- [x] Retirar `player.js` heredado
+
+### Criterio de cierre
+
+La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben consumir el mismo motor `RadioApp.audio`, sin crear nuevas fuentes de audio.
+
+**Estado técnico: implementación completada. Pendiente validación manual de reproducción y controles antes de integrar a `main`.**
 
 ---
 
@@ -256,11 +265,12 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Cerrar la rama `feature/config-white-label` con Alcatraz restaurado como configuración activa.
-2. Iniciar Fase 3 separando responsabilidades de interfaz y Media Session.
-3. Crear `app.js` como punto de inicialización.
-4. Reducir dependencias globales sin modificar el motor de audio aprobado.
-5. Después crear el modo `compact`, base del widget embebible para WordPress.
+1. Validar manualmente `feature/reorganizacion-arquitectura`.
+2. Probar Play/Pause, mute, volumen, visualizador, ecualizador y barra inferior.
+3. Confirmar que Media Session sigue respondiendo.
+4. Revisar consola sin errores.
+5. Si la prueba es correcta, integrar Fase 3 a `main`.
+6. Crear la rama de Fase 4 para construir el modo `compact`, base del widget WordPress.
 
 ---
 
