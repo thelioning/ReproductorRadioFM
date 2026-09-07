@@ -5,7 +5,7 @@ Documento de seguimiento operativo. Marcar cada tarea con `[x]` cuando quede val
 ## Estado actual
 
 - Rama estable objetivo: `main`
-- Rama de trabajo actual: `feature/widget-compact`
+- Rama de trabajo actual: `feature/wordpress-plugin`
 - Producto de referencia: Alcatraz Radio FM
 - Meta comercial: reproductor white-label reutilizable e integrable en WordPress
 
@@ -201,23 +201,34 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 
 El mismo núcleo debe funcionar en modo `compact` y `full`, mantener sincronía con barra inferior y Media Session y adaptarse a columnas reales de WordPress sin duplicar el motor de audio.
 
-**Estado: Fase 4 completada y aprobada.**
+**Estado: Fase 4 completada, aprobada e integrada a `main`.**
 
 ---
 
 # Fase 5 — Plugin WordPress MVP
 
-- [ ] Crear `feature/wordpress-plugin`
-- [ ] Crear archivo principal del plugin
-- [ ] Registrar CSS con `wp_enqueue_style`
-- [ ] Registrar JS con `wp_enqueue_script`
-- [ ] Crear shortcode `[radio_player]`
-- [ ] Crear `[radio_player mode="compact"]`
-- [ ] Crear `[radio_player mode="full"]`
-- [ ] Crear plantilla PHP del reproductor
-- [ ] Evitar cargar scripts varias veces
+- [x] Crear `feature/wordpress-plugin`
+- [x] Crear archivo principal del plugin `alcatraz-radio-player.php`
+- [x] Registrar CSS con `wp_enqueue_style`
+- [x] Registrar JS con `wp_enqueue_script`
+- [x] Crear shortcode `[radio_player]`
+- [x] Crear `[radio_player mode="compact"]`
+- [x] Crear `[radio_player mode="full"]`
+- [x] Crear plantilla PHP del reproductor
+- [x] Evitar cargar scripts varias veces en el MVP
+- [x] Reutilizar el mismo núcleo JS/CSS del proyecto sin duplicarlo dentro del plugin
+- [x] Evitar que los estilos de página del reproductor alteren el `body` de WordPress
+- [x] Evitar que el plugin cambie el título de la página WordPress
+- [x] Aislar las variables visuales principales dentro del contenedor del reproductor
+- [ ] Probar activación del plugin en WordPress local
+- [ ] Probar shortcode compacto en una página WordPress
+- [ ] Probar shortcode full en una página WordPress
+- [ ] Verificar Play/Pause, mute, volumen, visualizador, ecualizador, dock y Media Session dentro de WordPress
+- [ ] Revisar consola sin errores en WordPress
 - [ ] Probar con el sitio WordPress de Alcatraz
 - [ ] Probar con otro tema WordPress
+
+**Nota MVP:** por ahora se admite una sola instancia funcional del shortcode por página, para conservar IDs únicos y un único motor de audio.
 
 ---
 
@@ -293,13 +304,13 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Integrar Fase 4 a `main`.
-2. Crear `feature/wordpress-plugin`.
-3. Crear estructura inicial del plugin WordPress.
-4. Registrar CSS y JS correctamente con WordPress.
-5. Crear shortcode `[radio_player]` y variantes `compact` / `full`.
-6. Reutilizar el mismo núcleo sin duplicar lógica de audio.
-7. Probar primero en entorno WordPress de desarrollo antes de tocar el sitio real de Alcatraz.
+1. Preparar un WordPress local de pruebas.
+2. Instalar/activar este repositorio como plugin de desarrollo.
+3. Crear una página y colocar `[radio_player mode="compact"]`.
+4. Validar el widget dentro de un tema real de WordPress.
+5. Probar `[radio_player mode="full"]` en una página separada.
+6. Corregir cualquier conflicto de CSS/JS antes de probar en el sitio real de Alcatraz.
+7. Solo después de aprobar WordPress local, probar en el sitio del cliente.
 
 ---
 
