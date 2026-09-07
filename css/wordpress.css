@@ -4,10 +4,47 @@
   place-items: center;
   margin: 0 auto;
   padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .arf-player-host .player {
   max-width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/*
+ * Aislamiento tipográfico para WordPress.
+ * Algunos temas aplican estilos globales a h1, h2, botones y controles
+ * después de cargar el CSS del plugin. Estas reglas mantienen la identidad
+ * visual del reproductor sin modificar estilos fuera del widget.
+ */
+.arf-player-host .player__header h1,
+.arf-player-host .equalizer-panel h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  text-transform: none;
+  color: var(--text-main);
+}
+
+.arf-player-host .player__header h1 {
+  font-weight: 700;
+}
+
+.arf-player-host .equalizer-panel h2 {
+  font-weight: 700;
+}
+
+.arf-player-host button,
+.arf-player-host input,
+.arf-player-host select,
+.arf-player-host output,
+.arf-player-host label {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.arf-player-host button {
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 .arf-player-host[hidden] {
