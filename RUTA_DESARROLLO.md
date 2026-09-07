@@ -165,7 +165,7 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Mostrar nombre sólido en pausa y retomar animación en reproducción
 - [x] Implementar responsive para columnas y sidebars con Container Queries
 - [x] Mantener el mismo motor `RadioApp.audio`
-- [ ] Mantener sincronía con barra inferior y Media Session — validación final en modo compacto
+- [x] Mantener sincronía con barra inferior y Media Session en modo compacto
 - [x] Crear banco de prueba `dev/widget-preview.html`
 - [x] Validar ancho 470 px
 - [x] Validar ancho 400 px
@@ -174,6 +174,8 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Validar ecualizador plegado y desplegado en esos anchos
 
 **Resultado visual:** el widget mantiene logo, nombre, LIVE, visualizador, controles y ecualizador dentro del ancho disponible en 470, 400, 360 y 320 px. En anchos estrechos, las bandas del ecualizador permanecen accesibles mediante desplazamiento horizontal interno sin desbordar el widget.
+
+**Resultado funcional:** Play/Pause y mute permanecen sincronizados entre widget compacto, barra inferior y Media Session. Los controles externos de Chrome/Windows actualizan correctamente el estado del reproductor.
 
 ## Reproductor completo
 
@@ -194,6 +196,12 @@ La interfaz, la barra inferior, Media Session, visualizador y ecualizador deben 
 - [x] Sincronía básica
 - [x] Adaptarla a configuración white-label
 - [ ] Validar en páginas reales
+
+### Criterio de cierre
+
+El mismo núcleo debe funcionar en modo `compact` y `full`, mantener sincronía con barra inferior y Media Session y adaptarse a columnas reales de WordPress sin duplicar el motor de audio.
+
+**Estado: Fase 4 completada y aprobada.**
 
 ---
 
@@ -285,11 +293,13 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Volver la configuración local a `presentation.mode = "compact"`.
-2. Validar sincronía de Play/Pause y mute entre widget compacto y barra inferior.
-3. Validar Media Session en modo compacto.
-4. Si todo se mantiene estable, integrar Fase 4 a `main`.
-5. Crear `feature/wordpress-plugin` e iniciar el plugin WordPress MVP.
+1. Integrar Fase 4 a `main`.
+2. Crear `feature/wordpress-plugin`.
+3. Crear estructura inicial del plugin WordPress.
+4. Registrar CSS y JS correctamente con WordPress.
+5. Crear shortcode `[radio_player]` y variantes `compact` / `full`.
+6. Reutilizar el mismo núcleo sin duplicar lógica de audio.
+7. Probar primero en entorno WordPress de desarrollo antes de tocar el sitio real de Alcatraz.
 
 ---
 
