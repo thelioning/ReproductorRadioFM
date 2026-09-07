@@ -2,6 +2,8 @@
   width: min(100%, 470px);
   padding: 22px;
   border-radius: 24px;
+  container-type: inline-size;
+  container-name: radio-player;
 }
 
 .player[data-player-mode="compact"] .player__header {
@@ -150,10 +152,200 @@
   border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
+.player[data-player-mode="compact"] .eq-bands-wrap {
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .player[data-player-mode="compact"] .eq-bands {
   min-width: 560px;
 }
 
+/*
+ * Los container queries permiten que el widget responda al ancho real de la
+ * columna de WordPress, no solo al ancho completo de la ventana del navegador.
+ */
+@container radio-player (max-width: 410px) {
+  .player__header {
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
+    gap: 8px;
+  }
+
+  .player__logo {
+    width: 48px;
+    height: 35px;
+  }
+
+  .player__header h1 {
+    font-size: 1.05rem;
+  }
+
+  .player__header p {
+    font-size: 0.70rem;
+  }
+
+  .controls {
+    grid-template-columns: auto 1fr;
+    justify-items: stretch;
+    gap: 12px;
+  }
+
+  .play-button {
+    width: 56px;
+    height: 56px;
+  }
+
+  .volume-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .volume-group {
+    min-width: 0;
+  }
+
+  .eq-bands {
+    min-width: 530px;
+  }
+}
+
+@container radio-player (max-width: 360px) {
+  .player__header {
+    grid-template-columns: 46px minmax(0, 1fr) 46px;
+    gap: 7px;
+  }
+
+  .player__logo {
+    width: 43px;
+    height: 32px;
+  }
+
+  .player__header h1 {
+    font-size: 0.98rem;
+    white-space: nowrap;
+  }
+
+  .player__header p {
+    margin-top: 2px;
+    font-size: 0.66rem;
+  }
+
+  .live-badge {
+    padding: 5px 7px;
+    font-size: 0.60rem;
+  }
+
+  .controls {
+    gap: 9px;
+  }
+
+  .play-button {
+    width: 52px;
+    height: 52px;
+  }
+
+  .volume-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .volume-group {
+    gap: 8px;
+  }
+
+  .volume-control label,
+  #volumeValue {
+    font-size: 0.66rem;
+  }
+
+  .equalizer-panel {
+    padding-inline: 9px;
+  }
+
+  .equalizer-panel__actions {
+    gap: 5px;
+  }
+
+  #eqToggleLabel {
+    display: none;
+  }
+
+  .eq-presets {
+    gap: 5px;
+  }
+
+  .eq-preset {
+    min-width: 48px;
+    padding-inline: 8px;
+  }
+
+  .eq-bands {
+    min-width: 510px;
+  }
+}
+
+@container radio-player (max-width: 320px) {
+  .player__header h1 {
+    font-size: 0.91rem;
+  }
+
+  .player__header p {
+    font-size: 0.62rem;
+  }
+
+  .controls {
+    gap: 7px;
+  }
+
+  .play-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .volume-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .volume-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .equalizer-panel__icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .equalizer-panel h2 {
+    font-size: 0.82rem;
+  }
+
+  .eq-switch {
+    width: 42px;
+    height: 22px;
+  }
+
+  .eq-switch::after {
+    width: 16px;
+    height: 16px;
+  }
+
+  .eq-switch.is-enabled::after {
+    transform: translateX(20px);
+  }
+
+  .eq-collapse {
+    width: 26px;
+    height: 26px;
+  }
+
+  .eq-bands {
+    min-width: 490px;
+  }
+}
+
+/* Fallback para navegadores sin container queries cuando el viewport es móvil. */
 @media (max-width: 520px) {
   .player[data-player-mode="compact"] {
     width: 100%;
