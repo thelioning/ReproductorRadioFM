@@ -27,8 +27,10 @@
   }
 
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  const STORAGE_KEY = "alcatraz-equalizer-settings";
-  const STORAGE_COLLAPSED_KEY = "alcatraz-equalizer-collapsed";
+  const config = window.STATION_CONFIG || {};
+  const storageNamespace = config.storageNamespace || "radio-player";
+  const STORAGE_KEY = `${storageNamespace}-equalizer-settings`;
+  const STORAGE_COLLAPSED_KEY = `${storageNamespace}-equalizer-collapsed`;
   const FREQUENCIES = [32, 64, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
   const PRESETS = {
     Flat: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
