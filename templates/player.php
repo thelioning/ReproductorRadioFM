@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
       <span class="live-badge" data-station-live><?php echo esc_html($config['liveText']); ?></span>
     </header>
 
-    <audio id="radio" preload="none"></audio>
+    <audio id="radio" preload="none" src="<?php echo esc_url($config['streamUrl']); ?>"></audio>
 
     <section class="brand-static" aria-label="<?php echo esc_attr('Identidad visual de ' . $config['name']); ?>">
       <svg viewBox="0 0 1200 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
