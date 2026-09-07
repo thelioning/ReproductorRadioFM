@@ -226,11 +226,13 @@ El mismo núcleo debe funcionar en modo `compact` y `full`, mantener sincronía 
 - [x] Probar shortcode full en una página WordPress
 - [x] Verificar Play/Pause, mute, volumen, visualizador, ecualizador, dock y Media Session dentro de WordPress
 - [x] Validar control de volumen sincronizado en la barra inferior de WordPress
-- [ ] Revisar consola sin errores en WordPress después de los últimos ajustes
+- [x] Revisar consola sin errores en WordPress después de los últimos ajustes
 - [ ] Probar con el sitio WordPress de Alcatraz
 - [ ] Probar con otro tema WordPress
 
 **Resultado WordPress local:** el plugin fue detectado y activado mediante enlace de desarrollo en `wp-content/plugins`. Los modos `compact` y `full` cargan dentro de una página WordPress real, reproducen el stream y mantienen sincronizados los controles principales, el visualizador, el ecualizador, la barra inferior y Media Session.
+
+**Resultado de consola:** después de recargar y probar controles principales, la consola de Chrome quedó sin errores propios del plugin en WordPress local.
 
 **Nota de integración:** la posición vertical del shortcode dentro de la página depende del tema/plantilla de WordPress. El plugin no debe compensar el espaciado del tema con márgenes negativos globales.
 
@@ -310,9 +312,9 @@ No forman parte del MVP.
 
 # Próximo paso inmediato
 
-1. Revisar la consola de WordPress local después de los últimos ajustes y confirmar que no quedan errores propios del plugin.
-2. Probar el plugin con un segundo tema WordPress para detectar conflictos de CSS/JS.
-3. Repetir la prueba en `compact` y `full` con ese segundo tema.
+1. Probar el plugin con un segundo tema WordPress para detectar conflictos de CSS/JS.
+2. Repetir la prueba en `compact` y `full` con ese segundo tema.
+3. Revisar nuevamente la consola con el segundo tema.
 4. Si ambas pruebas son correctas, preparar la prueba controlada en el sitio WordPress de Alcatraz.
 5. Solo después de aprobar el sitio real, cerrar Fase 5 e iniciar el panel administrativo de la Fase 6.
 
