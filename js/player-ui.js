@@ -35,6 +35,29 @@
     setStatus(playing ? "Transmitiendo en vivo" : "Radio detenida");
   }
 
+  function getMediaErrorDetails() {
+    const element = audio.element;
+    const mediaError = element.error;
+    const descriptions = {
+      1: "MEDIA_ERR_ABORTED",
+      2: "MEDIA_ERR_NETWORK",
+      3: "MEDIA_ERR_DECODE",
+      4: "MEDIA_ERR_SRC_NOT_SUPPORTED"
+    };
+
+    return {
+      code: mediaError?.code || 0,
+      type: descriptions[mediaError?.code] || "SIN_CODIGO",
+      message: mediaError?.message || "",
+      currentSrc: element.currentSrc || element.src || "",
+      networkState: element.networkState,
+      readyState: element.readyState,
+      paused: element.paused,
+      muted: element.muted,
+      volume: element.volume
+    };
+  }
+
   playButton.addEventListener("click", async () => {
     if (audio.isPlaying()) {
       audio.pause();
@@ -47,7 +70,7 @@
       await audio.play();
       updatePlayUI();
     } catch (error) {
-      console.error("No se pudo iniciar la transmisión:", error);
+      console.error("No se pudo iniciar la transmisión:", error, getMediaErrorDetails());
       setStatus("Error al conectar con la emisora");
     }
   });
@@ -67,6 +90,7 @@
   audio.element.addEventListener("volumechange", updateVolumeUI);
   audio.element.addEventListener("waiting", () => setStatus("Cargando transmisión..."));
   audio.element.addEventListener("error", () => {
+    console.error("El elemento de audio reportó un error:", getMediaErrorDetails());
     setStatus("Error en la transmisión");
     updatePlayUI();
   });
