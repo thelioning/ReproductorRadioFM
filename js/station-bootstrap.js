@@ -12,10 +12,14 @@
   const mode = presentation.mode === "compact" ? "compact" : "full";
   const modeOptions = presentation[mode] || {};
 
-  if (!document.querySelector('link[data-radio-presentation]')) {
+  if (config.standalonePage !== false) {
+    document.body.classList.add("radio-player-page");
+  }
+
+  if (config.presentationStylesheetManaged !== true && !document.querySelector('link[data-radio-presentation]')) {
     const presentationStylesheet = document.createElement("link");
     presentationStylesheet.rel = "stylesheet";
-    presentationStylesheet.href = "css/presentation.css";
+    presentationStylesheet.href = config.presentationStylesheetUrl || "css/presentation.css";
     presentationStylesheet.dataset.radioPresentation = "true";
     document.head.appendChild(presentationStylesheet);
   }
@@ -38,7 +42,9 @@
     }
   });
 
-  document.title = config.name;
+  if (config.manageDocumentTitle !== false) {
+    document.title = config.name;
+  }
 
   const stationName = document.getElementById("stationName");
   const stationTagline = document.getElementById("stationTagline");
