@@ -1,0 +1,62 @@
+name: Empaquetar plugin para prueba de cliente
+
+on:
+  push:
+    branches:
+      - feature/wordpress-plugin
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar carpeta instalable
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_DIR="dist/alcatraz-radio-player"
+          rm -rf dist
+          mkdir -p "$PACKAGE_DIR/assets" "$PACKAGE_DIR/css" "$PACKAGE_DIR/js" "$PACKAGE_DIR/templates"
+
+          cp alcatraz-radio-player.php "$PACKAGE_DIR/"
+          cp assets/alcatraz-logo.png "$PACKAGE_DIR/assets/"
+
+          cp css/styles.css "$PACKAGE_DIR/css/"
+          cp css/visualizer.css "$PACKAGE_DIR/css/"
+          cp css/equalizer.css "$PACKAGE_DIR/css/"
+          cp css/dock-player.css "$PACKAGE_DIR/css/"
+          cp css/presentation.css "$PACKAGE_DIR/css/"
+          cp css/wordpress.css "$PACKAGE_DIR/css/"
+
+          cp js/station-bootstrap.js "$PACKAGE_DIR/js/"
+          cp js/audio-engine.js "$PACKAGE_DIR/js/"
+          cp js/player-ui.js "$PACKAGE_DIR/js/"
+          cp js/visualizer.js "$PACKAGE_DIR/js/"
+          cp js/equalizer.js "$PACKAGE_DIR/js/"
+          cp js/dock-player.js "$PACKAGE_DIR/js/"
+          cp js/media-session.js "$PACKAGE_DIR/js/"
+          cp js/app.js "$PACKAGE_DIR/js/"
+
+          cp templates/player.php "$PACKAGE_DIR/templates/"
+          cp DOCUMENTACION_CLIENTE.md "$PACKAGE_DIR/"
+          cp INSTALACION_CLIENTE.html "$PACKAGE_DIR/"
+          cp readme.txt "$PACKAGE_DIR/"
+
+      - name: Crear ZIP instalable de WordPress
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist
+          zip -r alcatraz-radio-player-v0.1.1-prueba.zip alcatraz-radio-player
+          unzip -l alcatraz-radio-player-v0.1.1-prueba.zip
+
+      - name: Publicar paquete de prueba
+        uses: actions/upload-artifact@v4
+        with:
+          name: alcatraz-radio-player-cliente
+          path: dist/alcatraz-radio-player-v0.1.1-prueba.zip
+          if-no-files-found: error
+          retention-days: 30
