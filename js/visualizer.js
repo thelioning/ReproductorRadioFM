@@ -1,10 +1,11 @@
 (() => {
   const SVG_NS = "http://www.w3.org/2000/svg";
   const spectrumGroup = document.getElementById("spectrumWindows");
+  const brandSpectrum = document.querySelector(".brand-spectrum");
   const audio = window.RadioApp?.audio;
   const audioElement = audio?.element;
 
-  if (!spectrumGroup || !audioElement || !audio) {
+  if (!spectrumGroup || !brandSpectrum || !audioElement || !audio) {
     return;
   }
 
@@ -22,6 +23,7 @@
   const MAX_HEIGHT = 178;
   const FRAME_INTERVAL = 1000 / 30;
   const LOOP_SECONDS = 9.86;
+  const SPECTRUM_MASK = "url(#spectrumMask)";
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bars = [];
@@ -29,6 +31,7 @@
   let lastFrame = 0;
   let lastTimestamp = 0;
   let animationSeconds = 0;
+  let hasAnimatedFrame = false;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -47,6 +50,14 @@
   function hash01(value) {
     const x = Math.sin(value * 91.733 + 17.19) * 43758.5453;
     return x - Math.floor(x);
+  }
+
+  function showSolidBrand() {
+    brandSpectrum.setAttribute("mask", "none");
+  }
+
+  function showAnimatedBrand() {
+    brandSpectrum.setAttribute("mask", SPECTRUM_MASK);
   }
 
   function createBar(x, index) {
@@ -146,15 +157,32 @@
     const playing = audio.isPlaying();
     const muted = audio.isMuted();
 
+    /*
+     * En pausa el área visual no queda vacía: se muestra el nombre completo
+     * de la emisora, sólido y sin animación. Al reanudar, vuelve la máscara
+     * del espectro y continúa la animación.
+     */
     if (!playing) {
       lastTimestamp = timestamp;
       hideSpectrum();
+      hasAnimatedFrame = false;
+      showSolidBrand();
       return;
     }
 
+    /*
+     * En mute se conserva el último fotograma del espectro. Si la reproducción
+     * comienza ya silenciada y aún no existe un fotograma animado, se mantiene
+     * el nombre sólido hasta que vuelva el sonido.
+     */
     if (muted) {
       lastTimestamp = timestamp;
       lastFrame = timestamp;
+
+      if (!hasAnimatedFrame) {
+        showSolidBrand();
+      }
+
       return;
     }
 
@@ -162,6 +190,7 @@
       return;
     }
 
+    showAnimatedBrand();
     updateAnimationClock(timestamp);
     lastFrame = timestamp;
 
@@ -181,9 +210,12 @@
       bar.rect.setAttribute("y", y.toFixed(2));
       bar.rect.setAttribute("height", height.toFixed(2));
     });
+
+    hasAnimatedFrame = true;
   }
 
   buildBars();
   hideSpectrum();
+  showSolidBrand();
   requestAnimationFrame(render);
 })();
