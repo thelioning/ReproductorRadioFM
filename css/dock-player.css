@@ -111,7 +111,8 @@
 
 .radio-dock__button:focus-visible,
 .radio-dock__close:focus-visible,
-.radio-dock-launcher:focus-visible {
+.radio-dock-launcher:focus-visible,
+.radio-dock__volume-slider:focus-visible {
   outline: 3px solid #8ec5ff;
   outline-offset: 3px;
 }
@@ -169,6 +170,68 @@
 
 .radio-dock__button.is-muted .radio-dock__volume-icon .mute {
   display: block;
+}
+
+.radio-dock__volume-control {
+  width: 190px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 8px;
+}
+
+.radio-dock__volume-slider {
+  width: 100%;
+  min-width: 0;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.radio-dock__volume-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-orange, #ff8a4c), var(--accent-pink, #ff7f77), var(--accent-purple, #bc74ee));
+}
+
+.radio-dock__volume-slider::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 0;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32);
+}
+
+.radio-dock__volume-slider::-moz-range-track {
+  height: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-orange, #ff8a4c), var(--accent-pink, #ff7f77), var(--accent-purple, #bc74ee));
+}
+
+.radio-dock__volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32);
+}
+
+.radio-dock__volume-value {
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .radio-dock__close {
@@ -240,6 +303,12 @@
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.28);
 }
 
+@media (max-width: 900px) {
+  .radio-dock__volume-control {
+    width: 150px;
+  }
+}
+
 @media (max-width: 700px) {
   .radio-dock {
     min-height: 72px;
@@ -269,6 +338,16 @@
     height: 40px;
   }
 
+  .radio-dock__volume-control {
+    width: 118px;
+    grid-template-columns: minmax(0, 1fr) 34px;
+    gap: 6px;
+  }
+
+  .radio-dock__volume-value {
+    font-size: 0.68rem;
+  }
+
   .radio-dock__close {
     width: 38px;
     height: 38px;
@@ -289,7 +368,7 @@
   }
 
   .radio-dock__name {
-    max-width: 116px;
+    max-width: 92px;
   }
 
   .radio-dock__controls {
@@ -299,5 +378,14 @@
   .radio-dock__button {
     width: 38px;
     height: 38px;
+  }
+
+  .radio-dock__volume-control {
+    width: 92px;
+    grid-template-columns: 1fr;
+  }
+
+  .radio-dock__volume-value {
+    display: none;
   }
 }
